@@ -1,0 +1,471 @@
+/* search-box */
+body {
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+	background-color: #ffffff;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+.fas {
+	font-size: 20px;
+	margin-inline: 8px;
+}
+
+img {
+	height: 20px;
+	margin-right: 10px;
+}
+
+.containerx {
+	display: flex;
+	height: 100vh; /* Adjusted to ensure it fills the viewport height */
+	width: 100%;
+	overflow: hidden; /* Prevents the container itself from scrolling */
+}
+
+.sidebar {
+	width: 15%;
+	flex-shrink: 0;
+	background-color: #f5f5f5;
+	color: #000000;
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+	height: 100%; /* Takes full height of its parent, .containerx */
+}
+
+.main-content {
+	flex: 1;
+	overflow: auto; /* Enables scrolling */
+	padding: 20px;
+	max-height: 100vh; /* Ensures it doesn't grow beyond the viewport height */
+}
+
+.sidebar h3,
+.sidebar a {
+	color: #a4a6a9;
+}
+
+.sidebar h3 {
+	font-size: 14px;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+}
+
+.sidebar a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	padding: 13px 20px;
+	transition: background 0.3s;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+	background-color: #f4bc87; /* Darker shade for active */
+	color: #ffffff;
+	border-right: 4px solid #cccccc;
+}
+
+.sidebar a img {
+	height: 20px;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 20px;
+	background-color: #ffffff;
+	box-sizing: border-box;
+	flex-shrink: 0;
+	width: 100%;
+}
+
+.header .logo,
+.header .search-box,
+.header .user-profile {
+	display: flex;
+	align-items: center;
+}
+
+.header .logo img,
+.header .search-box img {
+	height: 40px;
+}
+
+.header .search-box {
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	padding: 8px;
+	border-radius: 5px;
+	width: 300px;
+}
+
+.header .search-box input,
+.filters .search-box-filter input {
+	border: none;
+	outline: none;
+	flex-grow: 1;
+	font-size: 14px;
+}
+
+.header .user-profile img {
+	height: 40px;
+	border-radius: 50%;
+}
+
+.logo-text {
+	margin: 0px;
+}
+
+.user-profile {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.buttons {
+	display: flex;
+	gap: 10px;
+}
+
+.buttons button,
+.filters button.filter-button {
+	padding: 10px 20px;
+	border-radius: 5px;
+	background-color: #ffffff;
+	color: #666;
+	cursor: pointer;
+	transition: background 0.3s;
+	display: flex;
+	align-items: center;
+	font-weight: 600;
+	border: none;
+	font-size: 14px;
+}
+
+.buttons button:hover,
+.filters button.filter-button:hover {
+	background-color: #666;
+	color: #ffffff;
+}
+
+.buttons button img,
+.filters button.filter-button img {
+	filter: invert(47%) sepia(79%) saturate(472%) hue-rotate(333deg)
+		brightness(101%) contrast(101%);
+}
+
+.buttons button.add-inventory {
+	background-color: #f4bc87;
+	color: #ffffff;
+}
+
+.buttons button.add-inventory:hover {
+	background-color: #f09b4f;
+}
+
+.table-container {
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+	border-radius: 10px;
+	margin-top: 20px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	box-sizing: border-box;
+	overflow-x: auto; /* Allows horizontal scrolling if table overflows */
+	display: block;
+	max-height: 70vh;
+	overflow-y: scroll;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	position: sticky; /* Makes the header sticky */
+	top: -20px; /* Aligns the header to top */
+	background-color: #fff;
+	z-index: 2; /* Ensures header is above td elements */
+}
+
+.table-title h3 {
+	margin: 0;
+}
+
+th,
+td {
+	text-align: center;
+	padding: 10px;
+}
+
+th {
+	background-color: #f5f5f5;
+	border-bottom: 1px solid #dddddd;
+	color: #666;
+	position: sticky; /* Makes the table headers sticky */
+	top: 20px; /* Adjust this value to match the actual height of your .table-header */
+	z-index: 1;
+}
+
+th:nth-child(1) {
+	width: 5%;
+	min-width: 5%;
+	max-width: 5%;
+}
+/*
+th:nth-child(2) {
+	width: 20%;
+	min-width: 20%;
+	max-width: 20%;
+}
+
+th:nth-child(3) {
+	width: 7%;
+	min-width: 10%;
+	max-width: 10%;
+}
+
+th:nth-child(4) {
+	width: 15%;
+	min-width: 15%;
+	max-width: 15%;
+}
+
+th:nth-child(5) {
+	width: 15%;
+}
+
+*/
+
+th:nth-child(6) {
+	width: 28%;
+}
+
+td {
+	border-bottom: 1px solid #f5f5f5;
+	color: #333;
+}
+
+.filters {
+	display: flex;
+	align-items: center;
+}
+
+.filters .search-box-filter {
+	display: flex;
+	align-items: center;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	padding: 8px;
+	border-radius: 5px;
+	width: 300px;
+	margin-right: 20px;
+}
+
+.action-buttons button {
+	margin-right: 5px;
+	font-size: 14px;
+	border: none;
+	border-radius: 10px;
+	height: 30px;
+	width: auto;
+	cursor: pointer;
+	transition: background 0.3s;
+}
+
+.action-buttons .fas {
+	font-size: 14px;
+}
+
+.action-buttons button.view {
+	background-color: #28a745;
+	color: #ffffff;
+}
+
+.action-buttons button.edit {
+	background-color: #ffc107;
+	color: #ffffff;
+}
+
+.action-buttons button.delete {
+	background-color: #dc3545;
+	color: #ffffff;
+	float: right;
+}
+
+.custom-checkbox .custom-control-label::before,
+.custom-checkbox .custom-control-label::after {
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+	background-color: #f09b4f;
+	border-color: #f09b4f;
+}
+
+body.dark-mode {
+	background-color: #121212;
+	color: #ffffff;
+}
+
+.dark-mode .sidebar {
+	background-color: #444;
+}
+
+.dark-mode .header,
+.dark-mode .main-content,
+.dark-mode .table-container,
+.dark-mode .table-header {
+	background-color: #333;
+	color: #ffffff;
+}
+
+.dark-mode th,
+.dark-mode td {
+	background-color: #444;
+	color: #ffffff;
+}
+
+.dark-mode .sidebar h3,
+.dark-mode .sidebar a,
+.dark-mode .table-title h3 {
+	color: #ffffff;
+}
+
+.dark-mode a {
+	color: #ffffff;
+}
+
+.dark-mode .sidebar a:hover,
+.dark-mode .sidebar a.active {
+	background-color: #f4bc87;
+	color: white;
+}
+
+.dark-mode .search-box-filter {
+	background-color: #444;
+}
+
+.dark-mode .search-box-filter input,
+.dark-mode select.category-select {
+	color: #fff;
+	background-color: #444;
+}
+
+.dark-mode .action-buttons button.view {
+	background-color: #28a745;
+}
+
+.dark-mode .action-buttons button.edit {
+	background-color: #ffc107;
+}
+
+.dark-mode .action-buttons button.delete {
+	background-color: #dc3545;
+}
+
+.dark-mode .buttons button,
+.dark-mode .filters button.filter-button {
+	background-color: #444;
+	color: #ffffff;
+}
+
+.dark-mode .buttons button:hover,
+.dark-mode .filters button.filter-button:hover {
+	background-color: #555;
+}
+
+.dark-mode .save i,
+.dark-mode .cancel i {
+	color: #444;
+}
+
+.dark-mode .fas,
+.dark-mode .buttons button .fas {
+	color: #ffffff;
+}
+
+.dark-mode .buttons button.add-inventory {
+	background-color: #f4bc87;
+	color: #ffffff;
+}
+
+.dark-mode .buttons button.add-inventory:hover {
+	background-color: #f09b4f;
+}
+
+
+
+.filter-options {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding-inline: 10px;
+}
+
+.category-select {
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #ced4da;
+}
+
+.sort-button {
+	background-color: #666;
+	color: white;
+	padding: 5px 0px 5px 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.refresh-container {
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.button-fetch {
+	background-color: #e9c916;
+	color: white;
+	padding: 5px 15px; /* Adjusted padding for better spacing */
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex; /* Ensures content is aligned and centered */
+	align-items: center; /* Vertically aligns spinner with text */
+	justify-content: center; /* Centers content if needed */
+	margin-right: 20px;
+}
+
+.button-fetch:hover {
+	background-color: #bba212;
+}
+
+.spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	border-top-color: #fff;
+	animation: spin 1s ease-in-out infinite;
+	margin-left: 10px;
+	vertical-align: middle; /* Aligns spinner with text vertically */
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
