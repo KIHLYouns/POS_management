@@ -27,13 +27,8 @@ To get started with the frontend, navigate to the `React_Frontend` directory and
 ```sh
 cd React_Frontend
 npm install
-
 # Start the development server
 npm run dev
-
-# Build the app for production
-npm run build
-
 # Preview the production build
 npm run preview
 ```
