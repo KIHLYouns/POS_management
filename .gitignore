@@ -12,7 +12,7 @@
 *.sln
 *.sw?
 
-# React_Frontend
+# Node.js - React_Frontend
 React_Frontend/node_modules/
 React_Frontend/dist/
 React_Frontend/dist-ssr/
@@ -21,8 +21,13 @@ React_Frontend/yarn-debug.log*
 React_Frontend/yarn-error.log*
 React_Frontend/pnpm-debug.log*
 React_Frontend/lerna-debug.log*
+React_Frontend/package-lock.json
+React_Frontend/yarn.lock
 
-# Spring_Backend
+# Maven - Spring_Backend
+Spring_Backend/.mvn/
+Spring_Backend/mvnw
+Spring_Backend/mvnw.cmd
 Spring_Backend/target/
 
 # Compiled Java classes
@@ -37,5 +42,5 @@ Spring_Backend/target/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Virtual machine crash logs
 hs_err_pid*
