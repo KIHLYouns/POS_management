@@ -134,7 +134,7 @@ function ProductsTable({ addingProduct, setAddingProduct }) {
 	return (
 		<div className="table-container">
 			<TableHeader
-				title="Products"
+				title="Products List"
 				categories={categories}
 				onRefresh={() => dispatch(fetchProducts())}
 				loading={loading}

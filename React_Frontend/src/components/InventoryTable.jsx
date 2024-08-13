@@ -11,16 +11,13 @@ import {
 	updateInventoryItem,
 	deleteInventoryItem,
 } from "../actions/inventoryActions";
+import { fetchProducts, fetchCategories } from "../actions/productsActions";
 
 function InventoryTable({ addingItem, setAddingItem }) {
 	const [searchQuery, setSearchQuery] = useState("");
+	const [categorySearchQuery, setCategorySearchQuery] = useState("");
 	const initialItemData = {
-		product: {
-			name: "",
-			category: {
-				name: "",
-			},
-		},
+		product: {},
 		quantity: 0,
 		vendorPrice: 0,
 		salePrice: 0,
@@ -34,26 +31,33 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	const inventoryState = useSelector(
 		(state) => state.inventory || { inventory: [], loading: false }
 	);
+	const { products, categories } = useSelector((state) => state.products);
+
 	const { inventory, loading } = inventoryState;
 
 	useEffect(() => {
 		dispatch(fetchInventoryItems());
+		dispatch(fetchProducts());
+		dispatch(fetchCategories());
 	}, [dispatch]);
 
 	const filterItems = (item) => {
-		return (
-			item.product &&
-			item.product.name &&
-			typeof item.product.name === "string" &&
-			item.product.name.toLowerCase().includes(searchQuery.toLowerCase())
-		);
+		const productName = item.product?.name?.toLowerCase() || "";
+
+		const matchesName = searchQuery.toLowerCase()
+			? productName.includes(searchQuery.toLowerCase().trim())
+			: true;
+		const matchesCategory = categorySearchQuery.toLowerCase()
+			? item.product.category.id.toString() === categorySearchQuery
+			: true;
+
+		return matchesName && matchesCategory;
 	};
 
 	const filteredItems = inventory.filter(filterItems);
 
 	const handleAdd = async (e) => {
 		e.preventDefault();
-		// Adjust newItemData structure if necessary before dispatching
 		dispatch(addInventoryItem(newItemData));
 		setNewItemData(initialItemData);
 	};
@@ -63,7 +67,6 @@ function InventoryTable({ addingItem, setAddingItem }) {
 			...editFormData,
 			id,
 		};
-		// Adjust updatedItem structure if necessary before dispatching
 		dispatch(updateInventoryItem(id, updatedItem));
 		setEditingId(null);
 	};
@@ -75,12 +78,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	const handleEdit = (item) => {
 		setEditingId(item.id);
 		setEditFormData({
-			product: {
-				name: item.product.name,
-				category: {
-					name: item.product.category.name,
-				},
-			},
+			product: item.product,
 			quantity: item.quantity,
 			vendorPrice: item.vendorPrice,
 			salePrice: item.salePrice,
@@ -88,19 +86,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	};
 
 	const handleEditChange = (e, field) => {
-		// Ensure nested structure is maintained for product and category fields
-		if (field.includes(".")) {
-			const [parent, child] = field.split(".");
-			setEditFormData({
-				...editFormData,
-				[parent]: {
-					...editFormData[parent],
-					[child]: e.target.value,
-				},
-			});
-		} else {
-			setEditFormData({ ...editFormData, [field]: e.target.value });
-		}
+		setEditFormData({ ...editFormData, [field]: e.target.value });
 	};
 
 	const saveEdit = () => {
@@ -109,7 +95,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 
 	const cancelAdd = () => {
 		setAddingItem(false);
-		setNewItemData(initialItemData); // Reset new item form data
+		setNewItemData(initialItemData);
 	};
 
 	const renderInventoryRow = (item, index) => {
@@ -117,7 +103,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 			<InventoryRow
 				no={index + 1}
 				item={item}
-        productName={item.product.name} // Explicitly pass the product name
+				products={products}
 				isEditing={editingId === item.id}
 				editFormData={editFormData}
 				handleEditChange={handleEditChange}
@@ -136,6 +122,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 				setNewItemData={setNewItemData}
 				addingRow={addingItem}
 				setAddingRow={setAddingItem}
+				products={products}
 				handleAdd={handleAdd}
 				cancelAdd={cancelAdd}
 			/>
@@ -145,11 +132,16 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	return (
 		<div className="table-container">
 			<TableHeader
-				title="Inventory"
+				title="Inventory List"
 				onRefresh={() => dispatch(fetchInventoryItems())}
+				categories={categories}
 				loading={loading}
 				searchQuery={searchQuery}
 				onSearchChange={(e) => setSearchQuery(e.target.value)}
+				categorySearchQuery={categorySearchQuery}
+				onCategorySearchQuery={(e) =>
+					setCategorySearchQuery(e.target.value)
+				}
 			/>
 			<TableTemplate
 				columns={[

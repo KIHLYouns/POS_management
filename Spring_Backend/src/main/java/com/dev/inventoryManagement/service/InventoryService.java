@@ -36,7 +36,8 @@ public class InventoryService {
                 .map(existingInventory -> {
                     existingInventory.setProduct(inventory.getProduct());
                     existingInventory.setQuantity(inventory.getQuantity());
-                    // Update other fields if needed
+                    existingInventory.setVendorPrice(inventory.getVendorPrice());
+                    existingInventory.setSalePrice(inventory.getSalePrice());
                     return inventoryRepository.save(existingInventory);
                 });
     }

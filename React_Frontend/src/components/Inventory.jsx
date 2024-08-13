@@ -12,7 +12,7 @@ function Inventory() {
     <div className="main-content">
       <div className="header">
         <div>
-          <h2>Inventory Management</h2>
+          <h2>Inventory</h2>
         </div>
         <div className="buttons">
           <button className="export"> <i className="fas fa-file-export"></i> Export</button>

@@ -20,12 +20,13 @@ const UPDATE_INVENTORY_ITEM_FAILURE = 'UPDATE_INVENTORY_ITEM_FAILURE';
 // API Endpoint
 const API_ENDPOINT = 'http://localhost:8088/api';
 
-// Helper function for making API calls
+// Enhanced Helper function for making API calls with better error handling
 const apiCall = async (method, path, data) => {
   try {
     const response = await axios[method](`${API_ENDPOINT}/${path}`, data);
     return { data: response.data };
   } catch (error) {
+    console.error("API call error:", error.response ? error.response.data : error.message);
     throw error.response ? error.response.data : new Error('An unknown error occurred');
   }
 };
