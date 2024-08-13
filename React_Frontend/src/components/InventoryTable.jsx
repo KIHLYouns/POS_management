@@ -16,6 +16,8 @@ import { fetchProducts, fetchCategories } from "../actions/productsActions";
 function InventoryTable({ addingItem, setAddingItem }) {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [categorySearchQuery, setCategorySearchQuery] = useState("");
+	const [existingProducts, setExistingProducts] = useState([]);
+
 	const initialItemData = {
 		product: {},
 		quantity: 0,
@@ -40,6 +42,11 @@ function InventoryTable({ addingItem, setAddingItem }) {
 		dispatch(fetchProducts());
 		dispatch(fetchCategories());
 	}, [dispatch]);
+
+	useEffect(() => {
+		const ids = inventory.map((item) => item.product.id);
+		setExistingProducts(ids);
+	}, [inventory]);
 
 	const filterItems = (item) => {
 		const productName = item.product?.name?.toLowerCase() || "";
@@ -123,6 +130,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 				addingRow={addingItem}
 				setAddingRow={setAddingItem}
 				products={products}
+				existingProducts={existingProducts}
 				handleAdd={handleAdd}
 				cancelAdd={cancelAdd}
 			/>

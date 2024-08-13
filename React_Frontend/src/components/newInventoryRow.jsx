@@ -5,9 +5,13 @@ function NewInventoryRow({
 	setNewItemData,
 	addingRow,
 	products,
+	existingProducts,
 	handleAdd,
 	cancelAdd,
 }) {
+	const availableProducts = products.filter(
+		(product) => !existingProducts.includes(product.id)
+	);
 	return (
 		addingRow && (
 			<tr>
@@ -22,8 +26,8 @@ function NewInventoryRow({
 							});
 						}}
 					>
-						{products && products.length > 0 ? (
-							products.map((product) => (
+						{availableProducts && availableProducts.length > 0 ? (
+							availableProducts.map((product) => (
 								<option key={product.id} value={product.id}>
 									{product.name}
 								</option>
