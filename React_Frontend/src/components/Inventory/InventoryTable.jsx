@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InventoryRow from "./InventoryRow";
-import TableTemplate from "./TableTemplate";
-import TableHeader from "./tableHeader";
+import TableTemplate from "../TableBases/TableTemplate";
+import TableHeader from "../TableBases/tableHeader";
 import NewInventoryRow from "./newInventoryRow";
 
 import {
@@ -10,8 +10,8 @@ import {
 	addInventoryItem,
 	updateInventoryItem,
 	deleteInventoryItem,
-} from "../actions/inventoryActions";
-import { fetchProducts, fetchCategories } from "../actions/productsActions";
+} from "../../actions/inventoryActions";
+import { fetchProducts, fetchCategories } from "../../actions/productsActions";
 
 function InventoryTable({ addingItem, setAddingItem }) {
 	const [searchQuery, setSearchQuery] = useState("");

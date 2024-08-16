@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductRow from "./ProductRow";
-import TableTemplate from "./TableTemplate";
-import TableHeader from "./tableHeader";
+import TableTemplate from "../TableBases/TableTemplate";
+import TableHeader from "../TableBases/tableHeader";
 import NewProductRow from "./newProductRow";
 
 import {
@@ -11,7 +11,7 @@ import {
 	deleteProduct,
 	addProduct,
 	updateProduct,
-} from "../actions/productsActions";
+} from "../../actions/productsActions";
 
 function ProductsTable({ addingProduct, setAddingProduct }) {
 	const [searchQuery, setSearchQuery] = useState("");

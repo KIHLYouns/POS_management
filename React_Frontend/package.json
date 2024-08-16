@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --open",
+    "dev": "sleep 10 && vite --open",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start:both": "concurrently \"npm run dev\" \"cd ../Spring_Backend && ./mvnw spring-boot:run\""
+    ".": "concurrently \"cd ../Spring_Backend && ./mvnw spring-boot:run\" \"npm run dev\" "
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
