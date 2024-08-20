@@ -1,47 +1,67 @@
 import React from "react";
 
-const EditFields = ({ editFormData, item, products, handleEditChange }) => (
+const EditFields = ({
+	editFormData,
+	item,
+	handleEditChange,
+	setEditFormData,
+  }) => (
 	<>
-		<td value={editFormData.product.name}>
-			{/** <select
-				value={editFormData.product.name}
-				onChange={(e) => handleEditChange(e, "product.name")}
-			>
-				{products && products.length > 0 ? (
-					products.map((product) => (
-						<option key={product.id} value={product.name}>
-							{product.name}
-						</option>
-					))
-				) : (
-					<option>No products available</option>
-				)}
-			</select> */}
-			{item.product.name}
-		</td>
-		<td>
-			<input
-				type="number"
-				value={editFormData.quantity}
-				onChange={(e) => handleEditChange(e, "quantity")}
-			/>
-		</td>
-		<td>
-			<input
-				type="number"
-				value={editFormData.vendorPrice}
-				onChange={(e) => handleEditChange(e, "vendorPrice")}
-			/>
-		</td>
-		<td>
-			<input
-				type="number"
-				value={editFormData.salePrice}
-				onChange={(e) => handleEditChange(e, "salePrice")}
-			/>
-		</td>
+	  <td className="product-name">{item.product.name}</td>
+	  <td className="quantity-cell">
+		<div className="quantity-input">
+		  <button
+			type="button"
+			className="quantity-btn minus"
+			onClick={() =>
+			  setEditFormData({
+				...editFormData,
+				quantity: Math.max(0, editFormData.quantity - 1), // Prevent negative values
+			  })
+			}
+		  >
+			<i className="fas fa-minus"></i>
+		  </button>
+		  <input
+			type="number"
+			className="qty-field"
+			value={editFormData.quantity}
+			onChange={(e) => handleEditChange(e, "quantity")}
+			min="0" // Enforce non-negative values
+		  />
+		  <button
+			type="button"
+			className="quantity-btn plus"
+			onClick={() =>
+			  setEditFormData({
+				...editFormData,
+				quantity: editFormData.quantity + 1,
+			  })
+			}
+		  >
+			<i className="fas fa-plus"></i>
+		  </button>
+		</div>
+	  </td>
+	  <td>
+		<input
+		  type="number"
+		  className="price-input"
+		  value={editFormData.vendorPrice}
+		  onChange={(e) => handleEditChange(e, "vendorPrice")}
+		  min="0" // Enforce non-negative values
+		/>
+	  </td>
+	  <td>
+		<input
+		  type="number"
+		  value={editFormData.salePrice}
+		  onChange={(e) => handleEditChange(e, "salePrice")}
+		  min="0" // Enforce non-negative values
+		/>
+	  </td>
 	</>
-);
+  );
 
 const StaticFields = ({ item }) => (
 	<>
@@ -92,6 +112,7 @@ const InventoryRow = ({
 	products,
 	isEditing,
 	editFormData,
+	setEditFormData,
 	handleEditChange,
 	saveEdit,
 	cancelEdit,
@@ -104,6 +125,7 @@ const InventoryRow = ({
 			<EditFields
 				item={item}
 				editFormData={editFormData}
+				setEditFormData={setEditFormData}
 				handleEditChange={handleEditChange}
 				products={products}
 			/>

@@ -20,7 +20,7 @@ function App() {
 					<Routes>
 						<Route path="/products" element={<Products />} />
 						<Route path="/inventory" element={<Inventory />} />
-						<Route path="/transactions" element={<Transactions />}></Route>
+						<Route path="/orders" element={<Transactions />}></Route>
 					</Routes>
 				</div>
 			</div>

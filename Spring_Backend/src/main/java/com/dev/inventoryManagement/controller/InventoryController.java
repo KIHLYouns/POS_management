@@ -21,7 +21,7 @@ import com.dev.inventoryManagement.service.InventoryService;
 
 @RestController
 @RequestMapping("/api/inventory")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5174", "http://localhost:5173"})
 public class InventoryController {
 
     @Autowired
@@ -56,13 +56,5 @@ public class InventoryController {
     public ResponseEntity<Void> deleteInventoryItem(@PathVariable Long id) {
         inventoryService.deleteInventoryItem(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Additional inventory-specific methods
-    @PutMapping("/{id}/updateQuantity")
-    public ResponseEntity<Inventory> updateInventoryQuantity(@PathVariable Long id, @RequestParam int quantity) {
-        return inventoryService.updateInventoryQuantity(id, quantity)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
 }

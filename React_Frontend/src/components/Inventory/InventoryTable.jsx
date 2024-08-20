@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InventoryRow from "./InventoryRow";
 import TableTemplate from "../TableBases/TableTemplate";
-import TableHeader from "../TableBases/tableHeader";
+import TableHeader from "../TableBases/TableHeader";
 import NewInventoryRow from "./newInventoryRow";
 
 import {
@@ -113,6 +113,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 				products={products}
 				isEditing={editingId === item.id}
 				editFormData={editFormData}
+				setEditFormData={setEditFormData}
 				handleEditChange={handleEditChange}
 				saveEdit={saveEdit}
 				cancelEdit={() => setEditingId(null)}
@@ -154,8 +155,8 @@ function InventoryTable({ addingItem, setAddingItem }) {
 			<TableTemplate
 				columns={[
 					{ key: "no", label: "No" },
-					{ key: "name", label: "Product" },
-					{ key: "quantity", label: "Quantity" },
+					{ key: "name", label: "Product Name" },
+					{ key: "quantity", label: "Available Qty" },
 					{ key: "vendorPrice", label: "Vendor Price" },
 					{ key: "salePrice", label: "Sale Price" },
 					{ key: "actions", label: "Actions" },

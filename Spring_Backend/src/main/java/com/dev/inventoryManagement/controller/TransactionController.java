@@ -23,7 +23,7 @@ import com.dev.inventoryManagement.service.TransactionService;
 
 @RestController
 @RequestMapping("/api/transactions")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5174", "http://localhost:5173"})
 public class TransactionController {
 
     @Autowired
@@ -55,41 +55,5 @@ public class TransactionController {
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         transactionService.deleteTransaction(id);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/metadata")
-    public Map<String, Object> getTransactionMetadata() {
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("entityName", "Transaction");
-        metadata.put("fields", Arrays.asList(
-                new HashMap<String, String>() {
-            {
-                put("name", "id");
-                put("type", "Long");
-            }
-        },
-                new HashMap<String, String>() {
-            {
-                put("name", "transactionDate");
-                put("type", "LocalDateTime");
-            }
-        },
-                new HashMap<String, String>() {
-            {
-                put("name", "totalAmount");
-                put("type", "double");
-            }
-        }
-        ));
-        metadata.put("apiEndpoints", new HashMap<String, String>() {
-            {
-                put("getAll", "/api/transactions");
-                put("getById", "/api/transactions/{id}");
-                put("create", "/api/transactions");
-                put("update", "/api/transactions/{id}");
-                put("delete", "/api/transactions/{id}");
-            }
-        });
-        return metadata;
     }
 }

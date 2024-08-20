@@ -1,88 +1,134 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TransactionRow from "./TransactionRow";
+import TableHeader from "../TableBases/TableHeader";
 import TableTemplate from "../TableBases/TableTemplate";
-import TableHeader from "../TableBases/tableHeader";
-import NewTransactionRow from "./NewTransactionRow";
+import TransactionRow from "./TransactionRow";
+import TransactionItems from "./TransactionItems";
 
 import {
-  fetchTransactions,
-  addTransaction,
-  updateTransaction,
-  deleteTransaction,
-} from "../../actions/transactionsActions";
+	fetchTransactions,
+	addTransaction,
+	updateTransaction,
+	deleteTransaction,
+} from "../../actions/transactionActions";
 
 function TransactionsTable() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const initialTransactionData = { type: "", amount: 0, date: "" };
-  const [newTransactionData, setNewTransactionData] = useState(initialTransactionData);
-  const [editingId, setEditingId] = useState(null);
-  const [editFormData, setEditFormData] = useState(initialTransactionData);
+	const dispatch = useDispatch();
+	const { transactions = [], loading: transactionsLoading = false } =
+		useSelector((state) => state.transactions || {});
 
-  // Redux hooks for state and dispatch
-  const dispatch = useDispatch();
-  const { transactions, loading } = useSelector((state) => state.transactions);
+	const [expandedRows, setExpandedRows] = useState([]);
+	const [newTransactionData, setNewTransactionData] = useState({
+		date: "",
+		totalAmount: 0,
+	});
+	const [editingId, setEditingId] = useState(null);
+	const [editFormData, setEditFormData] = useState({
+		date: "",
+		totalAmount: 0,
+	});
 
-  // Fetch transactions on component mount
-  useEffect(() => {
-    dispatch(fetchTransactions());
-  }, [dispatch]);
+	useEffect(() => {
+		dispatch(fetchTransactions());
+	}, [dispatch]);
 
-  const filterTransactions = (transaction) => {
-    const matchesType = transaction.type.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesType;
-  };
+	const toggleRowExpansion = (transactionId) => {
+		setExpandedRows((prevExpandedRows) =>
+			prevExpandedRows.includes(transactionId)
+				? prevExpandedRows.filter((id) => id !== transactionId)
+				: [...prevExpandedRows, transactionId]
+		);
+	};
 
-  const filteredTransactions = transactions.filter(filterTransactions);
+	const handleAdd = async (e) => {
+		e.preventDefault();
+		dispatch(addTransaction(newTransactionData));
+		setNewTransactionData({ date: "", totalAmount: 0 }); // Reset to initial structure
+	};
 
-  const handleAdd = async (e) => {
-    e.preventDefault();
-    dispatch(addTransaction(newTransactionData));
-    setNewTransactionData(initialTransactionData);
-  };
+	const handleUpdate = async (id) => {
+		const updatedTransaction = {
+			...editFormData,
+			id,
+		};
+		dispatch(updateTransaction(id, updatedTransaction));
+		setEditingId(null);
+	};
 
-  const handleUpdate = async (id) => {
-    const updatedTransaction = {
-      ...editFormData,
-      id,
-    };
-    dispatch(updateTransaction(id, updatedTransaction));
-    setEditingId(null);
-  };
+	const handleDelete = (transactionId) => {
+		dispatch(deleteTransaction(transactionId));
+	};
 
-  const handleDelete = (transactionId) => {
-    dispatch(deleteTransaction(transactionId));
-  };
+	const handleEdit = (transaction) => {
+		setEditingId(transaction.id);
+		setEditFormData({
+			date: transaction.date,
+			totalAmount: transaction.totalAmount,
+			items: transaction.items, // Include items in edit form data
+		});
+	};
 
-  const handleEdit = (transaction) => {
-    setEditingId(transaction.id);
-    setEditFormData({
-      type: transaction.type,
-      amount: transaction.amount,
-      date: transaction.date,
-    });
-  };
+	const handleEditChange = (e, field) => {
+		setEditFormData({ ...editFormData, [field]: e.target.value });
+	};
 
-  return (
-    <div>
-      <TableTemplate>
-        <TableHeader />
-        {filteredTransactions.map((transaction) => (
-          <TransactionRow
-            key={transaction.id}
-            transaction={transaction}
-            handleEdit={() => handleEdit(transaction)}
-            handleDelete={() => handleDelete(transaction.id)}
-          />
-        ))}
-        <NewTransactionRow
-          newTransactionData={newTransactionData}
-          setNewTransactionData={setNewTransactionData}
-          handleAdd={handleAdd}
-        />
-      </TableTemplate>
-    </div>
-  );
+	const saveEdit = () => {
+		const updatedTransaction = {
+			...editFormData,
+			id: editingId,
+		};
+		dispatch(updateTransaction(editingId, updatedTransaction));
+		setEditingId(null);
+	};
+
+	const cancelEdit = () => {
+		setEditingId(null);
+	};
+
+	const renderTransactionRow = (transaction, index) => {
+		const itemsForTransaction = transaction.items;
+
+		return (
+			<React.Fragment key={transaction.id}>
+				<TransactionRow
+					transaction={transaction}
+					no={index + 1}
+					isExpanded={expandedRows.includes(transaction.id)}
+					onToggleExpand={() => toggleRowExpansion(transaction.id)}
+					onEdit={() => handleEdit(transaction)}
+					onDelete={() => handleDelete(transaction.id)}
+					isEditing={editingId === transaction.id}
+					editFormData={editFormData}
+					handleEditChange={handleEditChange}
+					saveEdit={saveEdit}
+					cancelEdit={cancelEdit}
+				/>
+				{expandedRows.includes(transaction.id) && (
+					<TransactionItems items={itemsForTransaction} />
+				)}
+			</React.Fragment>
+		);
+	};
+
+	return (
+		<div className="table-container">
+			<TableHeader
+				title="Transaction List"
+				onRefresh={() => dispatch(fetchTransactions())}
+				loading={transactionsLoading}
+			/>
+			<TableTemplate
+				columns={[
+					{ key: "id", label: "ID" },
+					{ key: "date", label: "Date" },
+					{ key: "totalAmount", label: "Total Amount" },
+					{ key: "actions", label: "Actions" },
+				]}
+				data={transactions}
+				renderRow={renderTransactionRow}
+			/>
+		</div>
+	);
 }
 
 export default TransactionsTable;

@@ -1,5 +1,7 @@
 package com.dev.inventoryManagement.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,17 +23,16 @@ public class TransactionItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "transaction_id")
-    private Transaction transaction;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "inventory_id", nullable = false)
+    private Inventory inventory;
 
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
-    private double price;
+    private double finalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "transaction_id", nullable = false)
+    @JsonIgnore
+    private Transaction transaction; 
 }

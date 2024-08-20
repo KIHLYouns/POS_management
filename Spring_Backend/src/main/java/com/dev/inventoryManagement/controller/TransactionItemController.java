@@ -19,7 +19,7 @@ import com.dev.inventoryManagement.models.TransactionItem;
 import com.dev.inventoryManagement.service.TransactionItemService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5174", "http://localhost:5173"})
 @RequestMapping("/api/transactionItems")
 public class TransactionItemController {
 
@@ -36,7 +36,7 @@ public class TransactionItemController {
         Optional<TransactionItem> transactionItem = transactionItemService.getTransactionItemById(id);
         return transactionItem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    
     @PostMapping
     public ResponseEntity<TransactionItem> createTransactionItem(@RequestBody TransactionItem transactionItem) {
         try {

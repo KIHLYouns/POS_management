@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductRow from "./ProductRow";
 import TableTemplate from "../TableBases/TableTemplate";
-import TableHeader from "../TableBases/tableHeader";
+import TableHeader from "../TableBases/TableHeader";
 import NewProductRow from "./newProductRow";
 
 import {

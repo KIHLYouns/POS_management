@@ -24,9 +24,9 @@ public class TransactionItemService {
     }
 
     public TransactionItem saveTransactionItem(TransactionItem transactionItem) {
-        // Ensure the transaction and product are not null or handle accordingly
-        if (transactionItem.getTransaction() == null || transactionItem.getProduct() == null) {
-            throw new IllegalArgumentException("Transaction and Product cannot be null");
+        // Ensure the transaction and inventory are not null or handle accordingly
+        if (transactionItem.getInventory() == null) {
+            throw new IllegalArgumentException("Transaction or Inventory cannot be null");
         }
         return transactionItemRepository.save(transactionItem);
     }
@@ -34,15 +34,11 @@ public class TransactionItemService {
     public Optional<TransactionItem> updateTransactionItem(Long id, TransactionItem updatedTransactionItem) {
         return transactionItemRepository.findById(id)
                 .map(existingTransactionItem -> {
-                    // Update fields, ensure transaction and product are properly managed
-                    if (updatedTransactionItem.getTransaction() != null) {
-                        existingTransactionItem.setTransaction(updatedTransactionItem.getTransaction());
-                    }
-                    if (updatedTransactionItem.getProduct() != null) {
-                        existingTransactionItem.setProduct(updatedTransactionItem.getProduct());
+                    if (updatedTransactionItem.getInventory() != null) {
+                        existingTransactionItem.setInventory(updatedTransactionItem.getInventory());
                     }
                     existingTransactionItem.setQuantity(updatedTransactionItem.getQuantity());
-                    existingTransactionItem.setPrice(updatedTransactionItem.getPrice());
+                    existingTransactionItem.setFinalPrice(updatedTransactionItem.getFinalPrice());
                     return transactionItemRepository.save(existingTransactionItem);
                 });
     }
@@ -50,5 +46,4 @@ public class TransactionItemService {
     public void deleteTransactionItem(Long id) {
         transactionItemRepository.deleteById(id);
     }
-    
 }

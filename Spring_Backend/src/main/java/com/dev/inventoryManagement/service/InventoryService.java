@@ -25,13 +25,11 @@ public class InventoryService {
     }
 
     public Inventory saveInventoryItem(Inventory inventory) {
-        // Add validation logic here (e.g., check for null product)
         return inventoryRepository.save(inventory);
     }
 
     @Transactional
     public Optional<Inventory> updateInventoryItem(Long id, Inventory inventory) {
-        // Add validation logic here
         return inventoryRepository.findById(id)
                 .map(existingInventory -> {
                     existingInventory.setProduct(inventory.getProduct());
@@ -44,18 +42,5 @@ public class InventoryService {
 
     public void deleteInventoryItem(Long id) {
         inventoryRepository.deleteById(id);
-    }
-
-    @Transactional
-    public Optional<Inventory> updateInventoryQuantity(Long id, int quantity) {
-        return inventoryRepository.findById(id)
-                .map(inventory -> {
-                    inventory.setQuantity(quantity); // Update the quantity
-                    return inventoryRepository.save(inventory);
-                });
-    }
-
-    public int getQuantity(Long id) {
-        return inventoryRepository.findById(id).get().getQuantity();
     }
 }
