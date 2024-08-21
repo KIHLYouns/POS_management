@@ -147,7 +147,7 @@ function ProductsTable({ addingProduct, setAddingProduct }) {
 			/>
 			<TableTemplate
 				columns={[
-					{ key: "no", label: "No" },
+					{ key: "no", label: "No", className: "No" },
 					{ key: "product", label: "Product" },
 					{ key: "category", label: "Category" },
 					{ key: "actions", label: "Actions" },

@@ -6,7 +6,8 @@ body {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
-	background: #fff;
+	background-color: #fff;
+	color: #000;
 }
 .fas {
 	font-size: 20px;
@@ -25,10 +26,9 @@ img {
 .sidebar {
 	width: 15%;
 	flex-shrink: 0;
-	color: #000;
 	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 	height: 100%;
-	background: #f5f5f5;
+	background-color: #f5f5f5;
 }
 .main-content {
 	flex: 1;
@@ -46,7 +46,7 @@ img {
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	transition: background 0.3s;
+	transition: background-color 0.3s;
 	padding: 13px 20px;
 	color: #a4a6a9;
 }
@@ -54,10 +54,7 @@ img {
 .sidebar a:hover {
 	color: #fff;
 	border-right: 4px solid #ccc;
-	background: #f4bc87;
-}
-.sidebar a img {
-	height: 20px;
+	background-color: #f4bc87;
 }
 .header {
 	display: flex;
@@ -67,7 +64,7 @@ img {
 	flex-shrink: 0;
 	width: 100%;
 	padding: 20px;
-	background: #fff;
+	background-color: #fff;
 }
 .header .logo img,
 .header .search-box img {
@@ -78,7 +75,7 @@ img {
 	border-radius: 5px;
 	width: 300px;
 	padding: 8px;
-	background: #fff;
+	background-color: #fff;
 }
 .filters .search-box-filter input,
 .header .search-box input {
@@ -105,19 +102,19 @@ img {
 	border-radius: 5px;
 	color: #666;
 	cursor: pointer;
-	transition: background 0.3s;
+	transition: background-color 0.3s;
 	display: flex;
 	align-items: center;
 	font-weight: 600;
 	border: none;
 	font-size: 14px;
 	padding: 10px 20px;
-	background: #fff;
+	background-color: #fff;
 }
 .buttons button:hover,
 .filters button.filter-button:hover {
 	color: #fff;
-	background: #666;
+	background-color: #666;
 }
 .buttons button img,
 .filters button.filter-button img {
@@ -135,7 +132,7 @@ img {
 	max-height: 70vh;
 	overflow-y: scroll;
 	padding: 20px;
-	background: #fff;
+	background-color: #fff;
 }
 table {
 	width: 100%;
@@ -150,7 +147,7 @@ table {
 	position: sticky;
 	top: -20px;
 	z-index: 2;
-	background: #fff;
+	background-color: #fff;
 }
 td,
 th {
@@ -163,9 +160,9 @@ th {
 	position: sticky;
 	top: 20px;
 	z-index: 1;
-	background: #f5f5f5;
+	background-color: #f5f5f5;
 }
-th:nth-child(1) {
+th.No:nth-child(1) {
 	width: 5%;
 	min-width: 5%;
 	max-width: 5%;
@@ -185,7 +182,7 @@ td {
 	width: 300px;
 	margin-right: 20px;
 	padding: 8px;
-	background: #fff;
+	background-color: #fff;
 }
 .action-buttons button {
 	margin-right: 5px;
@@ -195,61 +192,70 @@ td {
 	height: 30px;
 	width: auto;
 	cursor: pointer;
-	transition: background 0.3s;
+	transition: background-color 0.3s;
 }
 .action-buttons .fas {
 	font-size: 14px;
 }
 .action-buttons button.view {
 	color: #fff;
-	background: #28a745;
+	background-color: #28a745;
 }
 .action-buttons button.edit {
 	color: #fff;
-	background: #ffc107;
+	background-color: #ffc107;
 }
 .action-buttons button.delete {
 	color: #fff;
 	float: right;
-	background: #dc3545;
+	background-color: #dc3545;
 }
 body.dark-mode {
+	background-color: #121212;
 	color: #fff;
-	background: #121212;
 }
 .dark-mode .header,
 .dark-mode .main-content,
 .dark-mode .table-container,
 .dark-mode .table-header {
+	background-color: #333;
 	color: #fff;
-	background: #333;
 }
 .dark-mode .sidebar a.active,
 .dark-mode .sidebar a:hover {
+	background-color: #f4bc87;
 	color: #fff;
-	background: #f4bc87;
 }
 .dark-mode .search-box-filter input,
 .dark-mode select.category-select {
+	background-color: #444;
 	color: #fff;
-	background: #444;
-}
-.dark-mode .action-buttons button.view {
-	background: #28a745;
-}
-.dark-mode .action-buttons button.edit {
-	background: #ffc107;
-}
-.dark-mode .action-buttons button.delete {
-	background: #dc3545;
 }
 .dark-mode .buttons button:hover,
 .dark-mode .filters button.filter-button:hover {
-	background: #555;
+	background-color: #555;
 }
 .dark-mode .cancel i,
 .dark-mode .save i {
 	color: #444;
+}
+.dark-mode .search-box-filter,
+.dark-mode .sidebar {
+	background-color: #444;
+}
+.dark-mode .buttons button,
+.dark-mode .filters button.filter-button,
+.dark-mode td,
+.dark-mode th {
+	background-color: #444;
+	color: #fff;
+}
+
+.dark-mode .sidebar a,
+.dark-mode .sidebar h3,
+.dark-mode .table-title h3,
+.dark-mode a {
+	color: #fff;
 }
 .filter-options {
 	display: flex;
@@ -276,10 +282,10 @@ body.dark-mode {
 	justify-content: center;
 	margin-right: 20px;
 	padding: 5px 15px;
-	background: #e9c916;
+	background-color: #e9c916;
 }
 .button-fetch:hover {
-	background: #bba212;
+	background-color: #bba212;
 }
 .spinner {
 	display: inline-block;
@@ -294,10 +300,11 @@ body.dark-mode {
 }
 .expanded-row-content {
 	padding: 10px;
-	background: #f0f0f0;
+	background-color: #fff;
 }
 .transaction-items {
 	margin-top: 10px;
+	background-color: #f0f0f0;
 }
 .transaction-items-table {
 	width: 100%;
@@ -320,31 +327,76 @@ body.dark-mode {
 .table-title h3 {
 	margin: 0;
 }
-.buttons button.add-inventory,
-.dark-mode .buttons button.add-inventory {
+.buttons button.addNew,
+.dark-mode .buttons button.addNew {
 	color: #fff;
-	background: #f4bc87;
+	background-color: #f4bc87;
 }
-.buttons button.add-inventory:hover,
-.dark-mode .buttons button.add-inventory:hover {
-	background: #f09b4f;
+.buttons button.addNew:hover,
+.dark-mode .buttons button.addNew:hover {
+	background-color: #f09b4f;
 }
-.dark-mode .search-box-filter,
-.dark-mode .sidebar {
-	background: #444;
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
-.dark-mode .buttons button,
-.dark-mode .filters button.filter-button,
-.dark-mode td,
-.dark-mode th {
-	color: #fff;
-	background: #444;
+
+.quantity-controls,
+.quantity-decrement,
+.quantity-increment,
+.quantity-input {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
 }
-.dark-mode .buttons button .fas,
-.dark-mode .fas,
-.dark-mode .sidebar a,
-.dark-mode .sidebar h3,
-.dark-mode .table-title h3,
-.dark-mode a {
-	color: #fff;
+
+.quantity-decrement,
+.quantity-increment {
+	background-color: #f0f0f0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 2px;
+	transition: background-color 0.2s ease-in-out;
 }
+
+.quantity-decrement:hover,
+.quantity-increment:hover {
+	background-color: #e0e0e0;
+}
+
+.quantity-input {
+	width: 80px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	text-align: center;
+	transition: border-color 0.2s ease-in-out;
+}
+
+.quantity-input:focus {
+	border-color: #007bff;
+	outline: none;
+}
+input[type="number"] {
+	width: 80px;
+	text-align: center;
+
+}
+
+table input[type="text"],
+table select {
+	width: 60%;
+	padding: 5px;
+	margin: 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	text-align: center;
+}
+add

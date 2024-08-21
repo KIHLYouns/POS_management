@@ -5,63 +5,59 @@ const EditFields = ({
 	item,
 	handleEditChange,
 	setEditFormData,
-  }) => (
+}) => (
 	<>
-	  <td className="product-name">{item.product.name}</td>
-	  <td className="quantity-cell">
-		<div className="quantity-input">
-		  <button
-			type="button"
-			className="quantity-btn minus"
-			onClick={() =>
-			  setEditFormData({
-				...editFormData,
-				quantity: Math.max(0, editFormData.quantity - 1), // Prevent negative values
-			  })
-			}
-		  >
-			<i className="fas fa-minus"></i>
-		  </button>
-		  <input
-			type="number"
-			className="qty-field"
-			value={editFormData.quantity}
-			onChange={(e) => handleEditChange(e, "quantity")}
-			min="0" // Enforce non-negative values
-		  />
-		  <button
-			type="button"
-			className="quantity-btn plus"
-			onClick={() =>
-			  setEditFormData({
-				...editFormData,
-				quantity: editFormData.quantity + 1,
-			  })
-			}
-		  >
-			<i className="fas fa-plus"></i>
-		  </button>
-		</div>
-	  </td>
-	  <td>
-		<input
-		  type="number"
-		  className="price-input"
-		  value={editFormData.vendorPrice}
-		  onChange={(e) => handleEditChange(e, "vendorPrice")}
-		  min="0" // Enforce non-negative values
-		/>
-	  </td>
-	  <td>
-		<input
-		  type="number"
-		  value={editFormData.salePrice}
-		  onChange={(e) => handleEditChange(e, "salePrice")}
-		  min="0" // Enforce non-negative values
-		/>
-	  </td>
+		<td>{item.product.name}</td>
+		<td className="quantity-controls">
+			<button
+				className="quantity-decrement"
+				type="button"
+				onClick={() =>
+					setEditFormData({
+						...editFormData,
+						quantity: Math.max(0, editFormData.quantity - 1),
+					})
+				}
+			>
+				<i className="fas fa-minus"></i>
+			</button>
+			<input
+				className="quantity-input"
+				type="number"
+				value={editFormData.quantity}
+				onChange={(e) => handleEditChange(e, "quantity")}
+			/>
+			<button
+				className="quantity-increment"
+				type="button"
+				onClick={() =>
+					setEditFormData({
+						...editFormData,
+						quantity: editFormData.quantity + 1,
+					})
+				}
+			>
+				<i className="fas fa-plus"></i>
+			</button>
+		</td>
+		<td>
+			<input
+				className="vendor-price-input"
+				type="number"
+				value={editFormData.vendorPrice}
+				onChange={(e) => handleEditChange(e, "vendorPrice")}
+			/>
+		</td>
+		<td>
+			<input
+				className="sale-price-input"
+				type="number"
+				value={editFormData.salePrice}
+				onChange={(e) => handleEditChange(e, "salePrice")}
+			/>
+		</td>
 	</>
-  );
+);
 
 const StaticFields = ({ item }) => (
 	<>

@@ -10,7 +10,7 @@ function TableTemplate({
 			<thead>
 				<tr>
 					{columns.map((column) => (
-						<th key={column.key}>{column.label}</th>
+						<th key={column.key} className={column.className}>{column.label}</th>
 					))}
 				</tr>
 			</thead>

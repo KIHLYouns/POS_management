@@ -154,7 +154,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 			/>
 			<TableTemplate
 				columns={[
-					{ key: "no", label: "No" },
+					{ key: "no", label: "No", className: "No" },
 					{ key: "name", label: "Product Name" },
 					{ key: "quantity", label: "Available Qty" },
 					{ key: "vendorPrice", label: "Vendor Price" },

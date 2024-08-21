@@ -16,7 +16,7 @@ function Inventory() {
         </div>
         <div className="buttons">
           <button className="export"> <i className="fas fa-file-export"></i> Export</button>
-          <button className="add-inventory" onClick={toggleAddItem}> <i className="fas fa-plus"></i> Add Item</button>
+          <button className="addNew" onClick={toggleAddItem}> <i className="fas fa-plus"></i> Add Item</button>
         </div>
       </div>
       <InventoryTable addingItem={addingItem} setAddingItem={setAddingItem}/>

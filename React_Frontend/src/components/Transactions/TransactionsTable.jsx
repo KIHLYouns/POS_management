@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TableHeader from "../TableBases/TableHeader";
 import TableTemplate from "../TableBases/TableTemplate";
 import TransactionRow from "./TransactionRow";
-import TransactionItems from "./TransactionItems";
+import NewTransactionRow from "./NewTransactionRow";
 
 import {
 	fetchTransactions,
@@ -12,16 +12,29 @@ import {
 	deleteTransaction,
 } from "../../actions/transactionActions";
 
-function TransactionsTable() {
+import { fetchInventoryItems } from "../../actions/inventoryActions";
+
+function TransactionsTable({
+	addingTransaction,
+	setAddingTransaction,
+	newTransactionData,
+	setNewTransactionData,
+}) {
 	const dispatch = useDispatch();
 	const { transactions = [], loading: transactionsLoading = false } =
 		useSelector((state) => state.transactions || {});
 
+	const inventoryState = useSelector(
+		(state) => state.inventory || { inventory: [], loading: false }
+	);
+
+	const { inventory, loading } = inventoryState;
+
+	useEffect(() => {
+		dispatch(fetchInventoryItems());
+	}, [dispatch]);
+
 	const [expandedRows, setExpandedRows] = useState([]);
-	const [newTransactionData, setNewTransactionData] = useState({
-		date: "",
-		totalAmount: 0,
-	});
 	const [editingId, setEditingId] = useState(null);
 	const [editFormData, setEditFormData] = useState({
 		date: "",
@@ -43,7 +56,7 @@ function TransactionsTable() {
 	const handleAdd = async (e) => {
 		e.preventDefault();
 		dispatch(addTransaction(newTransactionData));
-		setNewTransactionData({ date: "", totalAmount: 0 }); // Reset to initial structure
+		setNewTransactionData({ date: "", totalAmount: 0, items: [] });
 	};
 
 	const handleUpdate = async (id) => {
@@ -68,8 +81,17 @@ function TransactionsTable() {
 		});
 	};
 
-	const handleEditChange = (e, field) => {
-		setEditFormData({ ...editFormData, [field]: e.target.value });
+	// Adjust the handleEditChange function to support editing items within a transaction
+	const handleEditChange = (value, field, index) => {
+		if (field === "quantity" || field === "finalPrice") {
+			// Handle changes in transaction items
+			const updatedItems = [...editFormData.items];
+			updatedItems[index] = { ...updatedItems[index], [field]: value };
+			setEditFormData({ ...editFormData, items: updatedItems });
+		} else {
+			// Handle changes in transaction fields other than items
+			setEditFormData({ ...editFormData, [field]: value });
+		}
 	};
 
 	const saveEdit = () => {
@@ -84,16 +106,24 @@ function TransactionsTable() {
 	const cancelEdit = () => {
 		setEditingId(null);
 	};
+	const cancelAdd = () => {
+		setAddingTransaction(false);
+		setNewTransactionData({
+			date: "",
+			totalAmount: 0,
+			items: [],
+		});
+	};
 
 	const renderTransactionRow = (transaction, index) => {
-		const itemsForTransaction = transaction.items;
+		const isExpanded = expandedRows.includes(transaction.id);
 
 		return (
 			<React.Fragment key={transaction.id}>
 				<TransactionRow
 					transaction={transaction}
 					no={index + 1}
-					isExpanded={expandedRows.includes(transaction.id)}
+					isExpanded={isExpanded}
 					onToggleExpand={() => toggleRowExpansion(transaction.id)}
 					onEdit={() => handleEdit(transaction)}
 					onDelete={() => handleDelete(transaction.id)}
@@ -103,31 +133,70 @@ function TransactionsTable() {
 					saveEdit={saveEdit}
 					cancelEdit={cancelEdit}
 				/>
-				{expandedRows.includes(transaction.id) && (
-					<TransactionItems items={itemsForTransaction} />
-				)}
 			</React.Fragment>
 		);
 	};
 
+	const renderNewTransactionTable = () => {
+		return (
+			addingTransaction && (
+				<div className="table-container">
+					<div className="table-header">
+						<div className="table-title">
+							<h3>New Transaction</h3>
+						</div>
+					</div>
+					<table>
+						<thead>
+							<th className="No">No</th>
+							<th>Date</th>
+							<th>Total Amount</th>
+							<th>Actions</th>
+						</thead>
+						<tbody>{renderNewTransactionRow()}</tbody>
+					</table>
+				</div>
+			)
+		);
+	};
+
+	const renderNewTransactionRow = () => {
+		return (
+			<NewTransactionRow
+				newTransactionData={newTransactionData}
+				setNewTransactionData={setNewTransactionData}
+				addingRow={addingTransaction}
+				setAddingRow={setAddingTransaction}
+				handleAdd={handleAdd}
+				cancelAdd={cancelAdd}
+				inventory={inventory}
+			/>
+		);
+	};
+
 	return (
-		<div className="table-container">
-			<TableHeader
-				title="Transaction List"
-				onRefresh={() => dispatch(fetchTransactions())}
-				loading={transactionsLoading}
-			/>
-			<TableTemplate
-				columns={[
-					{ key: "id", label: "ID" },
-					{ key: "date", label: "Date" },
-					{ key: "totalAmount", label: "Total Amount" },
-					{ key: "actions", label: "Actions" },
-				]}
-				data={transactions}
-				renderRow={renderTransactionRow}
-			/>
-		</div>
+		<>
+			{renderNewTransactionTable()}
+			<div className="table-container">
+				<TableHeader
+					title="Transaction List"
+					onRefresh={() => dispatch(fetchTransactions())}
+					loading={transactionsLoading}
+				/>
+				<TableTemplate
+					columns={[
+						{ key: "no", label: "No", className: "No" },
+						{ key: "date", label: "Date" },
+						{ key: "totalAmount", label: "Total Amount" },
+						{ key: "actions", label: "Actions" },
+					]}
+					data={transactions}
+					addingRow={false}
+					renderRow={renderTransactionRow}
+					renderNewRow={renderNewTransactionRow}
+				/>
+			</div>
+		</>
 	);
 }
 
