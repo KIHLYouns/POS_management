@@ -40,12 +40,12 @@ function NewInventoryRow({
 				<td>
 					<input
 						type="number"
-						placeholder="Quantity"
-						value={newItemData.quantity}
+						placeholder="Stock Quantity"
+						value={newItemData.stockQuantity}
 						onChange={(e) =>
 							setNewItemData({
 								...newItemData,
-								quantity: e.target.value,
+								stockQuantity: e.target.value,
 							})
 						}
 					/>
@@ -53,12 +53,12 @@ function NewInventoryRow({
 				<td>
 					<input
 						type="number"
-						placeholder="Vendor Price"
-						value={newItemData.vendorPrice}
+						placeholder="Vendor Cost"
+						value={newItemData.vendorCost}
 						onChange={(e) =>
 							setNewItemData({
 								...newItemData,
-								vendorPrice: e.target.value,
+								vendorCost: e.target.value,
 							})
 						}
 					/>
@@ -66,12 +66,12 @@ function NewInventoryRow({
 				<td>
 					<input
 						type="number"
-						placeholder="Sale Price"
-						value={newItemData.salePrice}
+						placeholder="Retail Price"
+						value={newItemData.retailPrice}
 						onChange={(e) =>
 							setNewItemData({
 								...newItemData,
-								salePrice: e.target.value,
+								retailPrice: e.target.value,
 							})
 						}
 					/>
@@ -86,16 +86,16 @@ function NewInventoryRow({
 								return;
 							}
 
-							if (newItemData.quantity <= 0) {
-								alert("Please enter a valid quantity.");
+							if (newItemData.stockQuantity <= 0) {
+								alert("Please enter a valid stock quantity.");
 								return;
 							}
 
 							if (
-								newItemData.vendorPrice <= 0 ||
-								newItemData.salePrice <= 0
+								newItemData.vendorCost <= 0 ||
+								newItemData.retailPrice <= 0
 							) {
-								alert("Please enter valid prices.");
+								alert("Please enter valid costs.");
 								return;
 							}
 							await handleAdd(e);

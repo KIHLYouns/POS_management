@@ -1,15 +1,15 @@
 package com.dev.inventoryManagement.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,16 +23,16 @@ public class TransactionItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "inventory_id", nullable = false)
-    private Inventory inventory;
-
-    @Column(nullable = false)
-    private int quantity;
-
-    private double finalPrice;
+    @JoinColumn(name = "inventory_id")
+    private InventoryItem inventoryItem;
 
     @ManyToOne
-    @JoinColumn(name = "transaction_id", nullable = false)
+    @JoinColumn(name = "transaction_id")
     @JsonIgnore
-    private Transaction transaction; 
+    private Transaction transaction;
+
+    @Column(nullable = false)
+    private int quantitySold;
+
+    private double finalUnitPrice;
 }

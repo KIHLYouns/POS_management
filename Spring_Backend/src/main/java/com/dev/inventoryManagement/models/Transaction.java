@@ -1,19 +1,16 @@
 package com.dev.inventoryManagement.models;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,14 +19,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "transactions")
 public class Transaction {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "EEEE, yyyy-MM-dd HH:mm")
-    private LocalDateTime date;
+    private String date;
 
     @Column(nullable = false)
     private double totalAmount;

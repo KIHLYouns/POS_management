@@ -6,9 +6,9 @@ import Sidebar from "./components/Sidebar";
 import Products from "./components/Products/Products";
 import Inventory from "./components/Inventory/Inventory";
 import Transactions from "./components/Transactions/Transactions";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 import "./App.css";
-
 
 function App() {
 	return (
@@ -18,9 +18,10 @@ function App() {
 				<div className="containerx">
 					<Sidebar />
 					<Routes>
+						<Route path="/dashboard" element={<Dashboard />} />
 						<Route path="/products" element={<Products />} />
 						<Route path="/inventory" element={<Inventory />} />
-						<Route path="/orders" element={<Transactions />}></Route>
+						<Route path="/orders" element={<Transactions />} />
 					</Routes>
 				</div>
 			</div>

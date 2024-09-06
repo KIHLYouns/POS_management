@@ -75,19 +75,18 @@ const ActionButtons = ({
 	</td>
 );
 
-// Component for transaction items
+// Updated TransactionItems component to handle null inventoryItem case
 const TransactionItems = ({
 	items,
 	isEditing,
 	editFormData,
-	setEditFormData,
 	handleEditChange,
 }) => (
 	<tr>
 		<td colSpan={4} className="expanded-row-content">
 			<div className="transaction-items">
 				{items.length > 0 ? (
-					<table className="transaction-items-table">
+					<table>
 						<thead>
 							<tr>
 								<th className="No">No</th>
@@ -101,9 +100,16 @@ const TransactionItems = ({
 							{items.map((item, index) => (
 								<tr key={item.id}>
 									<td>{index + 1}</td>
-									<td>{item.inventory.product.name}</td>
 									<td>
-										{item.inventory.product.category.name}
+										{item.inventoryItem
+											? item.inventoryItem.product.name
+											: "Unknown Product"}
+									</td>
+									<td>
+										{item.inventoryItem
+											? item.inventoryItem.product
+													.category.name
+											: "Unknown Category"}
 									</td>
 									<td className="quantity-controls">
 										{isEditing ? (
@@ -118,9 +124,10 @@ const TransactionItems = ({
 																editFormData
 																	.items[
 																	index
-																].quantity - 1
-															), // Use editFormData for current state
-															"quantity",
+																].quantitySold -
+																	1
+															),
+															"quantitySold",
 															index
 														)
 													}
@@ -133,15 +140,15 @@ const TransactionItems = ({
 													value={
 														editFormData.items[
 															index
-														].quantity
+														].quantitySold
 													}
 													onChange={(e) =>
 														handleEditChange(
 															parseInt(
 																e.target.value,
 																10
-															), // Ensure value is treated as a number
-															"quantity",
+															),
+															"quantitySold",
 															index
 														)
 													}
@@ -153,8 +160,8 @@ const TransactionItems = ({
 														handleEditChange(
 															editFormData.items[
 																index
-															].quantity + 1, // Use editFormData for current state
-															"quantity",
+															].quantitySold + 1,
+															"quantitySold",
 															index
 														)
 													}
@@ -163,7 +170,7 @@ const TransactionItems = ({
 												</button>
 											</>
 										) : (
-											item.quantity
+											item.quantitySold
 										)}
 									</td>
 									<td>
@@ -172,21 +179,20 @@ const TransactionItems = ({
 												type="number"
 												value={
 													editFormData.items[index]
-														.finalPrice
+														.finalUnitPrice
 												}
 												onChange={(e) =>
 													handleEditChange(
 														e.target.value,
-														"finalPrice",
+														"finalUnitPrice",
 														index
 													)
 												}
 											/>
 										) : (
-											`$${item.finalPrice}`
+											`$${item.finalUnitPrice}`
 										)}
 									</td>
-									<></>
 								</tr>
 							))}
 						</tbody>
@@ -202,34 +208,35 @@ const TransactionItems = ({
 // Main component for a transaction row
 const TransactionRow = ({
 	transaction,
+	no,
 	isExpanded,
-	onToggleExpand,
+	onExpandToggle,
 	isEditing,
-	editFormData,
-	handleEditChange,
-	saveEdit,
-	cancelEdit,
+	editingData,
+	onEditChange,
+	onSaveEdit,
+	onCancelEdit,
 	onDelete,
 	onEdit,
 }) => (
 	<>
 		<tr>
-			<td>{transaction.id}</td>
+			<td>{no}</td>
 			{isEditing ? (
 				<EditFields
-					editFormData={editFormData}
-					handleEditChange={handleEditChange}
+					editFormData={editingData}
+					handleEditChange={onEditChange}
 				/>
 			) : (
 				<StaticFields transaction={transaction} />
 			)}
 			<ActionButtons
 				isEditing={isEditing}
-				saveEdit={saveEdit}
-				cancelEdit={cancelEdit}
-				onEdit={() => onEdit(transaction.id)}
-				onDelete={() => onDelete(transaction.id)}
-				onToggleExpand={() => onToggleExpand(transaction.id)}
+				saveEdit={onSaveEdit}
+				cancelEdit={onCancelEdit}
+				onEdit={onEdit}
+				onDelete={onDelete}
+				onToggleExpand={onExpandToggle}
 				isExpanded={isExpanded}
 			/>
 		</tr>
@@ -237,8 +244,8 @@ const TransactionRow = ({
 			<TransactionItems
 				items={transaction.items}
 				isEditing={isEditing}
-				editFormData={editFormData}
-				handleEditChange={handleEditChange}
+				editFormData={editingData}
+				handleEditChange={onEditChange}
 			/>
 		)}
 	</>

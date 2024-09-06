@@ -7,40 +7,56 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dev.inventoryManagement.models.Inventory;
-import com.dev.inventoryManagement.repository.InventoryRepository;
+import com.dev.inventoryManagement.models.InventoryItem;
+import com.dev.inventoryManagement.models.TransactionItem;
+import com.dev.inventoryManagement.repository.InventoryItemRepository;
+import com.dev.inventoryManagement.repository.TransactionItemRepository;
 
 @Service
 public class InventoryService {
 
     @Autowired
-    private InventoryRepository inventoryRepository;
+    private InventoryItemRepository inventoryItemRepository;
 
-    public List<Inventory> getAllInventoryItems() {
-        return inventoryRepository.findAll();
+    @Autowired
+    private TransactionItemRepository transactionItemRepository;
+
+    public List<InventoryItem> getAllInventoryItems() {
+        return inventoryItemRepository.findAll();
     }
 
-    public Optional<Inventory> getInventoryItemById(Long id) {
-        return inventoryRepository.findById(id);
+    public Optional<InventoryItem> getInventoryItemById(Long id) {
+        return inventoryItemRepository.findById(id);
     }
 
-    public Inventory saveInventoryItem(Inventory inventory) {
-        return inventoryRepository.save(inventory);
+    public InventoryItem saveInventoryItem(InventoryItem inventoryItem) {
+        return inventoryItemRepository.save(inventoryItem);
     }
 
     @Transactional
-    public Optional<Inventory> updateInventoryItem(Long id, Inventory inventory) {
-        return inventoryRepository.findById(id)
+    public Optional<InventoryItem> updateInventoryItem(Long id, InventoryItem inventoryItem) {
+        return inventoryItemRepository.findById(id)
                 .map(existingInventory -> {
-                    existingInventory.setProduct(inventory.getProduct());
-                    existingInventory.setQuantity(inventory.getQuantity());
-                    existingInventory.setVendorPrice(inventory.getVendorPrice());
-                    existingInventory.setSalePrice(inventory.getSalePrice());
-                    return inventoryRepository.save(existingInventory);
+                    existingInventory.setProduct(inventoryItem.getProduct());
+                    existingInventory.setStockQuantity(inventoryItem.getStockQuantity());
+                    existingInventory.setVendorCost(inventoryItem.getVendorCost());
+                    existingInventory.setRetailPrice(inventoryItem.getRetailPrice());
+                    return inventoryItemRepository.save(existingInventory);
                 });
     }
 
+    @Transactional
     public void deleteInventoryItem(Long id) {
-        inventoryRepository.deleteById(id);
+        // Find all TransactionItems referencing this InventoryItem
+        List<TransactionItem> relatedTransactionItems = transactionItemRepository.findByInventoryItemId(id);
+
+        // Set the inventoryItem field to null in the related TransactionItems
+        for (TransactionItem transactionItem : relatedTransactionItems) {
+            transactionItem.setInventoryItem(null);
+            transactionItemRepository.save(transactionItem);
+        }
+
+        // Now delete the InventoryItem
+        inventoryItemRepository.deleteById(id);
     }
 }

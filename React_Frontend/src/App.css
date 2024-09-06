@@ -1,402 +1,604 @@
+/* General styles */
 body {
-	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-	height: 100vh;
-	width: 100vw;
-	overflow: hidden;
-	margin: 0;
-	padding: 0;
-	background-color: #fff;
-	color: #000;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    /* Remove transition for dark mode color */
 }
+
 .fas {
-	font-size: 20px;
-	margin-inline: 8px;
+    font-size: 20px;
+    margin-inline: 8px;
 }
+
 img {
-	height: 20px;
-	margin-right: 10px;
+    height: 20px;
+    margin-right: 10px;
 }
+
 .containerx {
-	display: flex;
-	height: 100vh;
-	width: 100%;
-	overflow: hidden;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
 }
+
+/* Sidebar Styles */
 .sidebar {
-	width: 15%;
-	flex-shrink: 0;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-	height: 100%;
-	background-color: #f5f5f5;
+    width: 15%;
+    flex-shrink: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    background-color: #f5f5f5;
+    /* Remove transition for sidebar background */
 }
-.main-content {
-	flex: 1;
-	overflow: auto;
-	max-height: 100vh;
-	padding: 20px;
-}
+
 .sidebar h3 {
-	font-size: 14px;
-	margin-bottom: 10px;
-	text-transform: uppercase;
-	color: #a4a6a9;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: #a4a6a9;
+    /* Remove transition for sidebar heading color */
 }
+
 .sidebar a {
-	display: flex;
-	align-items: center;
-	text-decoration: none;
-	transition: background-color 0.3s;
-	padding: 13px 20px;
-	color: #a4a6a9;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    /* Remove transition for sidebar link color */
+    padding: 13px 20px;
+    color: #a4a6a9;
 }
+
 .sidebar a.active,
 .sidebar a:hover {
-	color: #fff;
-	border-right: 4px solid #ccc;
-	background-color: #f4bc87;
+    color: #fff;
+    border-right: 4px solid #ccc;
+    background-color: #f4bc87;
 }
+
+/* Header Styles */
 .header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	box-sizing: border-box;
-	flex-shrink: 0;
-	width: 100%;
-	padding: 20px;
-	background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    /* Remove transition for header background */
 }
+
 .header .logo img,
 .header .search-box img {
-	height: 40px;
+    height: 40px;
 }
+
 .header .search-box {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	width: 300px;
-	padding: 8px;
-	background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    padding: 8px;
+    background-color: #fff;
+    transition: border-color 0.3s;
 }
+
 .filters .search-box-filter input,
 .header .search-box input {
-	border: none;
-	outline: 0;
-	flex-grow: 1;
-	font-size: 14px;
+    border: none;
+    outline: 0;
+    flex-grow: 1;
+    font-size: 14px;
+    color: #333;
+    /* Remove transition for input color */
 }
+
 .header .user-profile img {
-	height: 40px;
-	border-radius: 50%;
+    height: 40px;
+    border-radius: 50%;
 }
+
 .user-profile {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
+
+/* Button Styles */
 .buttons {
-	display: flex;
-	gap: 10px;
+    display: flex;
+    gap: 10px;
 }
+
 .buttons button,
 .filters button.filter-button {
-	border-radius: 5px;
-	color: #666;
-	cursor: pointer;
-	transition: background-color 0.3s;
-	display: flex;
-	align-items: center;
-	font-weight: 600;
-	border: none;
-	font-size: 14px;
-	padding: 10px 20px;
-	background-color: #fff;
+    border-radius: 5px;
+    color: #666;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    border: none;
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #fff;
 }
+
 .buttons button:hover,
 .filters button.filter-button:hover {
-	color: #fff;
-	background-color: #666;
+    color: #fff;
+    background-color: #666;
 }
+
 .buttons button img,
 .filters button.filter-button img {
-	filter: invert(47%) sepia(79%) saturate(472%) hue-rotate(333deg)
-		brightness(101%) contrast(101%);
+    filter: invert(47%) sepia(79%) saturate(472%) hue-rotate(333deg)
+        brightness(101%) contrast(101%);
 }
+
+/* Table Styles */
 .table-container {
-	border: 1px solid #ddd;
-	border-radius: 10px;
-	margin-top: 20px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-	box-sizing: border-box;
-	overflow-x: auto;
-	display: block;
-	max-height: 70vh;
-	overflow-y: scroll;
-	padding: 20px;
-	background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    overflow-x: auto;
+    display: block;
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding: 20px;
+    background-color: #fff;
+    /* Remove transition for table container background */
 }
+
 table {
-	width: 100%;
-	border-collapse: collapse;
-	table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
+
 .table-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-	position: sticky;
-	top: -20px;
-	z-index: 2;
-	background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: sticky;
+    top: -20px;
+    z-index: 2;
+    background-color: #fff;
+    /* Remove transition for table header background */
 }
+
 td,
 th {
-	text-align: center;
-	padding: 10px;
+    text-align: center;
+    padding: 10px;
+    /* Remove transition for table cell color */
 }
+
 th {
-	border-bottom: 1px solid #ddd;
-	color: #666;
-	position: sticky;
-	top: 20px;
-	z-index: 1;
-	background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    color: #666;
+    position: sticky;
+    top: 20px;
+    z-index: 1;
+    background-color: #f5f5f5;
+    /* Remove transition for table header background */
 }
+
 th.No:nth-child(1) {
-	width: 5%;
-	min-width: 5%;
-	max-width: 5%;
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
 }
+
 th:nth-child(6) {
-	width: 28%;
+    width: 28%;
 }
+
 td {
-	border-bottom: 1px solid #f5f5f5;
-	color: #333;
+    border-bottom: 1px solid #f5f5f5;
+    color: #333;
+    /* Remove transition for table cell background */
 }
+
 .filters .search-box-filter {
-	display: flex;
-	align-items: center;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	width: 300px;
-	margin-right: 20px;
-	padding: 8px;
-	background-color: #fff;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-right: 20px;
+    padding: 8px;
+    background-color: #fff;
+    transition: border-color 0.3s;
 }
+
 .action-buttons button {
-	margin-right: 5px;
-	font-size: 14px;
-	border: none;
-	border-radius: 10px;
-	height: 30px;
-	width: auto;
-	cursor: pointer;
-	transition: background-color 0.3s;
+    margin-right: 5px;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    width: auto;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
+
 .action-buttons .fas {
-	font-size: 14px;
+    font-size: 14px;
 }
+
 .action-buttons button.view {
-	color: #fff;
-	background-color: #28a745;
+    color: #fff;
+    background-color: #28a745;
 }
+
 .action-buttons button.edit {
-	color: #fff;
-	background-color: #ffc107;
+    color: #fff;
+    background-color: #ffc107;
 }
+
 .action-buttons button.delete {
-	color: #fff;
-	float: right;
-	background-color: #dc3545;
+    color: #fff;
+    float: right;
+    background-color: #dc3545;
 }
+
+/* Dark Mode Styles */
 body.dark-mode {
-	background-color: #121212;
-	color: #fff;
+    background-color: #121212;
+    color: #fff;
+    /* Remove transition for dark mode color */
 }
+
 .dark-mode .header,
 .dark-mode .main-content,
 .dark-mode .table-container,
 .dark-mode .table-header {
-	background-color: #333;
-	color: #fff;
+    background-color: #333;
+    color: #fff;
 }
+
 .dark-mode .sidebar a.active,
 .dark-mode .sidebar a:hover {
-	background-color: #f4bc87;
-	color: #fff;
+    background-color: #f4bc87;
+    color: #fff;
 }
+
 .dark-mode .search-box-filter input,
 .dark-mode select.category-select {
-	background-color: #444;
-	color: #fff;
+    background-color: #444;
+    color: #fff;
 }
+
 .dark-mode .buttons button:hover,
 .dark-mode .filters button.filter-button:hover {
-	background-color: #555;
+    background-color: #555;
 }
+
 .dark-mode .cancel i,
 .dark-mode .save i {
-	color: #444;
+    color: #444;
 }
+
 .dark-mode .search-box-filter,
 .dark-mode .sidebar {
-	background-color: #444;
+    background-color: #444;
 }
+
 .dark-mode .buttons button,
 .dark-mode .filters button.filter-button,
 .dark-mode td,
 .dark-mode th {
-	background-color: #444;
-	color: #fff;
+    background-color: #444;
+    color: #fff;
 }
 
 .dark-mode .sidebar a,
 .dark-mode .sidebar h3,
 .dark-mode .table-title h3,
 .dark-mode a {
-	color: #fff;
+    color: #fff;
 }
+
+.dark-mode .transaction-items td , 
+.dark-mode th {
+    background-color: #555;
+    align-content: center;
+}
+
+/* Filter Options Styles */
 .filter-options {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	padding-inline: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-inline: 10px;
 }
+
 .category-select {
-	border-radius: 5px;
-	border: 1px solid #ced4da;
-	padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 5px 10px;
+    transition: border-color 0.3s;
 }
+
+/* Refresh Button Styles */
 .refresh-container {
-	align-items: center;
-	justify-content: flex-start;
+    align-items: center;
+    justify-content: flex-start;
 }
+
 .button-fetch {
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-right: 20px;
-	padding: 5px 15px;
-	background-color: #e9c916;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    padding: 5px 15px;
+    background-color: #e9c916;
+    transition: background-color 0.3s;
 }
+
 .button-fetch:hover {
-	background-color: #bba212;
+    background-color: #bba212;
 }
+
 .spinner {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border: 3px solid rgba(255, 255, 255, 0.3);
-	border-radius: 50%;
-	border-top-color: #fff;
-	animation: spin 1s ease-in-out infinite;
-	margin-left: 10px;
-	vertical-align: middle;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 10px;
+    vertical-align: middle;
 }
+
+/* Expanded Row Content Styles */
 .expanded-row-content {
-	padding: 10px;
-	background-color: #fff;
+    padding: 10px;
+    background-color: #fff;
 }
+
+/* Transaction Items Styles */
 .transaction-items {
-	margin-top: 10px;
-	background-color: #f0f0f0;
+    margin-top: 10px;
+    background-color: #f0f0f0;
 }
+
 .transaction-items-table {
-	width: 100%;
-	border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
+
 .transaction-items-table td,
-.transaction-items-table th {
-	border: 1px solid #ddd;
-	text-align: left;
-	padding: 8px;
+.transaction-items .th {
+    text-align: center;
+    padding: 8px;
 }
+
+/* Common Styles */
 .filters,
 .header .logo,
 .header .search-box,
 .header .user-profile {
-	display: flex;
-	align-items: center;
-}
-.logo-text,
-.table-title h3 {
-	margin: 0;
-}
-.buttons button.addNew,
-.dark-mode .buttons button.addNew {
-	color: #fff;
-	background-color: #f4bc87;
-}
-.buttons button.addNew:hover,
-.dark-mode .buttons button.addNew:hover {
-	background-color: #f09b4f;
-}
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
+    display: flex;
+    align-items: center;
 }
 
+.logo-text,
+.table-title h3 {
+    margin: 0;
+}
+
+/* Add New Button Styles */
+.buttons button.addNew,
+.dark-mode .buttons button.addNew {
+    color: #fff;
+    background-color: #f4bc87;
+    transition: background-color 0.3s;
+}
+
+.buttons button.addNew:hover,
+.dark-mode .buttons button.addNew:hover {
+    background-color: #f09b4f;
+}
+
+/* Spin Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Quantity Controls Styles */
 .quantity-controls,
 .quantity-decrement,
 .quantity-increment,
 .quantity-input {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
 .quantity-decrement,
 .quantity-increment {
-	background-color: #f0f0f0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	cursor: pointer;
-	padding: 2px;
-	transition: background-color 0.2s ease-in-out;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .quantity-decrement:hover,
 .quantity-increment:hover {
-	background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
 
 .quantity-input {
-	width: 80px;
-	padding: 5px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	text-align: center;
-	transition: border-color 0.2s ease-in-out;
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.2s ease-in-out;
 }
 
 .quantity-input:focus {
-	border-color: #007bff;
-	outline: none;
+    border-color: #007bff;
+    outline: none;
 }
+
+/* Input and Select Styles */
 input[type="number"] {
-	width: 80px;
-	text-align: center;
+    width: 80px;
+    text-align: center;
 
 }
 
 table input[type="text"],
 table select {
-	width: 60%;
-	padding: 5px;
-	margin: 0;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-	text-align: center;
+    width: 60%;
+    padding: 5px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: border-color 0.3s;
 }
-add
+
+/* Dashboard Specific Styles */
+.dashboard-content {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Allow charts to wrap to the next line */
+}
+
+.kpi-container {
+    display: flex;
+    gap: 20px;
+    width: 100%; /* Make KPIs take up full width */
+}
+
+.kpi {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    /* Remove transition for KPI background */
+    width: calc(50% - 10px); /* Adjust KPI width for better layout */
+    text-align: center; /* Center text within KPI */
+    margin-bottom: 10px; /* Add space between KPIs */
+}
+
+.chart-container {
+    display: flex;
+    gap: 20px;
+    width: 100%; /* Make charts take up full width */
+    flex-wrap: wrap; /* Allow charts to wrap to the next line */
+}
+
+.chart {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    /* Remove transition for chart background */
+    width: calc(33.33% - 20px); /* Make charts take full width */
+    margin-bottom: 10px; /* Add space between charts */
+}
+
+.chart h3 {
+    margin-bottom: 10px;
+    /* Remove transition for chart title color */
+}
+
+/* Recharts Styles (adjust as needed) */
+.recharts-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.recharts-cartesian-axis-tick-value {
+    font-size: 12px;
+    /* Remove transition for axis tick value color */
+}
+
+.recharts-tooltip-label {
+    font-weight: bold;
+    /* Remove transition for tooltip label color */
+}
+
+.recharts-pie-label-line {
+    stroke: #8884d8; /* Customize pie label line color */
+}
+
+.recharts-pie-label-text {
+    font-size: 14px;
+    /* Remove transition for pie label text color */
+}
+
+/* Dark Mode Styles for Dashboard Components */
+.dark-mode .dashboard-content,
+.dark-mode .kpi-container,
+.dark-mode .kpi,
+.dark-mode .chart-container,
+.dark-mode .chart {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .kpi p,
+.dark-mode .chart h3,
+.dark-mode .recharts-cartesian-axis-tick-value,
+.dark-mode .recharts-pie-label-text {
+    color: #fff;
+}
+
+.dark-mode .recharts-tooltip-label {
+    color: #fff;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) { 
+    /* For larger screens, allow three charts per row */
+    .chart {
+        width: calc(33.33% - 20px); 
+    }
+}
+
+@media (max-width: 768px) { 
+    /* For smaller screens, stack KPIs and charts vertically */
+    .kpi-container,
+    .chart-container {
+        flex-direction: column; 
+    }
+
+    .kpi,
+    .chart {
+        width: 100%; /* Make KPIs and charts full width on smaller screens */
+        margin-bottom: 20px;
+    }
+}

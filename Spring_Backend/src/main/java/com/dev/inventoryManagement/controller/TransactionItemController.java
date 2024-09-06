@@ -36,15 +36,12 @@ public class TransactionItemController {
         Optional<TransactionItem> transactionItem = transactionItemService.getTransactionItemById(id);
         return transactionItem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
+
     @PostMapping
     public ResponseEntity<TransactionItem> createTransactionItem(@RequestBody TransactionItem transactionItem) {
-        try {
-            TransactionItem createdTransactionItem = transactionItemService.saveTransactionItem(transactionItem);
-            return ResponseEntity.ok(createdTransactionItem);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        // No need for try-catch here anymore
+        TransactionItem createdTransactionItem = transactionItemService.saveTransactionItem(transactionItem);
+        return ResponseEntity.ok(createdTransactionItem);
     }
 
     @PutMapping("/{id}")

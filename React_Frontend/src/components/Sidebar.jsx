@@ -27,7 +27,7 @@ function Sidebar() {
 		localStorage.setItem("isDarkMode", !isDarkMode);
 		dispatch(toggleDarkMode());
 	};
-    
+
 	return (
 		<div className="sidebar">
 			<NavLink

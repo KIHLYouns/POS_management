@@ -24,21 +24,17 @@ public class TransactionItemService {
     }
 
     public TransactionItem saveTransactionItem(TransactionItem transactionItem) {
-        // Ensure the transaction and inventory are not null or handle accordingly
-        if (transactionItem.getInventory() == null) {
-            throw new IllegalArgumentException("Transaction or Inventory cannot be null");
-        }
         return transactionItemRepository.save(transactionItem);
     }
 
     public Optional<TransactionItem> updateTransactionItem(Long id, TransactionItem updatedTransactionItem) {
         return transactionItemRepository.findById(id)
                 .map(existingTransactionItem -> {
-                    if (updatedTransactionItem.getInventory() != null) {
-                        existingTransactionItem.setInventory(updatedTransactionItem.getInventory());
+                    if (updatedTransactionItem.getInventoryItem() != null) {
+                        existingTransactionItem.setInventoryItem(updatedTransactionItem.getInventoryItem());
                     }
-                    existingTransactionItem.setQuantity(updatedTransactionItem.getQuantity());
-                    existingTransactionItem.setFinalPrice(updatedTransactionItem.getFinalPrice());
+                    existingTransactionItem.setQuantitySold(updatedTransactionItem.getQuantitySold());
+                    existingTransactionItem.setFinalUnitPrice(updatedTransactionItem.getFinalUnitPrice());
                     return transactionItemRepository.save(existingTransactionItem);
                 });
     }

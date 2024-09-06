@@ -10,4 +10,5 @@ import com.dev.inventoryManagement.models.TransactionItem;
 @Repository
 public interface TransactionItemRepository extends JpaRepository<TransactionItem, Long> {
     List<TransactionItem> findByTransactionId(Long transactionId);
+    List<TransactionItem> findByInventoryItemId(Long inventoryItemId);
 }

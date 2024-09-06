@@ -15,7 +15,10 @@ const EditFields = ({
 				onClick={() =>
 					setEditFormData({
 						...editFormData,
-						quantity: Math.max(0, editFormData.quantity - 1),
+						stockQuantity: Math.max(
+							0,
+							editFormData.stockQuantity - 1
+						),
 					})
 				}
 			>
@@ -24,8 +27,8 @@ const EditFields = ({
 			<input
 				className="quantity-input"
 				type="number"
-				value={editFormData.quantity}
-				onChange={(e) => handleEditChange(e, "quantity")}
+				value={editFormData.stockQuantity}
+				onChange={(e) => handleEditChange(e, "stockQuantity")}
 			/>
 			<button
 				className="quantity-increment"
@@ -33,7 +36,7 @@ const EditFields = ({
 				onClick={() =>
 					setEditFormData({
 						...editFormData,
-						quantity: editFormData.quantity + 1,
+						stockQuantity: editFormData.stockQuantity + 1,
 					})
 				}
 			>
@@ -42,18 +45,18 @@ const EditFields = ({
 		</td>
 		<td>
 			<input
-				className="vendor-price-input"
+				className="vendor-cost-input"
 				type="number"
-				value={editFormData.vendorPrice}
-				onChange={(e) => handleEditChange(e, "vendorPrice")}
+				value={editFormData.vendorCost}
+				onChange={(e) => handleEditChange(e, "vendorCost")}
 			/>
 		</td>
 		<td>
 			<input
-				className="sale-price-input"
+				className="retail-price-input"
 				type="number"
-				value={editFormData.salePrice}
-				onChange={(e) => handleEditChange(e, "salePrice")}
+				value={editFormData.retailPrice}
+				onChange={(e) => handleEditChange(e, "retailPrice")}
 			/>
 		</td>
 	</>
@@ -62,9 +65,9 @@ const EditFields = ({
 const StaticFields = ({ item }) => (
 	<>
 		<td>{item.product.name}</td>
-		<td>{item.quantity}</td>
-		<td>${item.vendorPrice}</td>
-		<td>${item.salePrice}</td>
+		<td>{item.stockQuantity}</td>
+		<td>${item.vendorCost}</td>
+		<td>${item.retailPrice}</td>
 	</>
 );
 

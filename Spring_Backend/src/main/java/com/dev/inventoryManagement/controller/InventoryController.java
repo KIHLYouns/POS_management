@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dev.inventoryManagement.models.Inventory;
+import com.dev.inventoryManagement.models.InventoryItem;
 import com.dev.inventoryManagement.service.InventoryService;
 
 @RestController
@@ -28,26 +27,26 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @GetMapping
-    public List<Inventory> getAllInventoryItems() {
+    public List<InventoryItem> getAllInventoryItems() {
         return inventoryService.getAllInventoryItems();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Inventory> getInventoryItemById(@PathVariable Long id) {
+    public ResponseEntity<InventoryItem> getInventoryItemById(@PathVariable Long id) {
         return inventoryService.getInventoryItemById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Inventory> createInventoryItem(@RequestBody Inventory inventory) {
-        Inventory savedInventory = inventoryService.saveInventoryItem(inventory);
+    public ResponseEntity<InventoryItem> createInventoryItem(@RequestBody InventoryItem inventoryItem) {
+        InventoryItem savedInventory = inventoryService.saveInventoryItem(inventoryItem);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedInventory);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Inventory> updateInventoryItem(@PathVariable Long id, @RequestBody Inventory inventory) {
-        return inventoryService.updateInventoryItem(id, inventory)
+    public ResponseEntity<InventoryItem> updateInventoryItem(@PathVariable Long id, @RequestBody InventoryItem inventoryItem) {
+        return inventoryService.updateInventoryItem(id, inventoryItem)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+public class InventoryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -26,10 +26,9 @@ public class Inventory {
     private Product product;
 
     @Column(nullable = false)
-    private int quantity;
+    private int stockQuantity;
 
-    @Column(nullable = false)
-    private double vendorPrice;
+    private double vendorCost;
     
-    private double salePrice;
+    private double retailPrice;
 }

@@ -3,6 +3,8 @@
 *.log
 *.local
 note.txt
+script.js
+README.txt
 
 # IDEs and Editors
 .vscode/

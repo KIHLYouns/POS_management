@@ -20,9 +20,9 @@ function InventoryTable({ addingItem, setAddingItem }) {
 
 	const initialItemData = {
 		product: {},
-		quantity: 0,
-		vendorPrice: 0,
-		salePrice: 0,
+		stockQuantity: 0,
+		vendorCost: 0,
+		retailPrice: 0,
 	};
 	const [newItemData, setNewItemData] = useState(initialItemData);
 	const [editingId, setEditingId] = useState(null);
@@ -86,9 +86,9 @@ function InventoryTable({ addingItem, setAddingItem }) {
 		setEditingId(item.id);
 		setEditFormData({
 			product: item.product,
-			quantity: item.quantity,
-			vendorPrice: item.vendorPrice,
-			salePrice: item.salePrice,
+			stockQuantity: item.stockQuantity,
+			vendorCost: item.vendorCost,
+			retailPrice: item.retailPrice,
 		});
 	};
 
@@ -156,9 +156,9 @@ function InventoryTable({ addingItem, setAddingItem }) {
 				columns={[
 					{ key: "no", label: "No", className: "No" },
 					{ key: "name", label: "Product Name" },
-					{ key: "quantity", label: "Available Qty" },
-					{ key: "vendorPrice", label: "Vendor Price" },
-					{ key: "salePrice", label: "Sale Price" },
+					{ key: "stockQuantity", label: "Available Qty" },
+					{ key: "vendorCost", label: "Vendor Cost" },
+					{ key: "retailPrice", label: "Retail Price" },
 					{ key: "actions", label: "Actions" },
 				]}
 				data={filteredItems}
