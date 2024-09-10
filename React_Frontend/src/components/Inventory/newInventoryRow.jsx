@@ -22,7 +22,7 @@ function NewInventoryRow({
 						onChange={(e) => {
 							setNewItemData({
 								...newItemData,
-								product: { id: e.target.value },
+								product: { id: parseInt(e.target.value, 10) }, // Convert to number
 							});
 						}}
 					>

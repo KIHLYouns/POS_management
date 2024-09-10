@@ -4,6 +4,8 @@ import InventoryRow from "./InventoryRow";
 import TableTemplate from "../TableBases/TableTemplate";
 import TableHeader from "../TableBases/TableHeader";
 import NewInventoryRow from "./newInventoryRow";
+import JsBarcode from "jsbarcode";
+import { v4 as uuidv4 } from "uuid";
 
 import {
 	fetchInventoryItems,
@@ -28,7 +30,6 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	const [editingId, setEditingId] = useState(null);
 	const [editFormData, setEditFormData] = useState(initialItemData);
 
-	// Redux hooks for state and dispatch
 	const dispatch = useDispatch();
 	const inventoryState = useSelector(
 		(state) => state.inventory || { inventory: [], loading: false }
@@ -63,9 +64,32 @@ function InventoryTable({ addingItem, setAddingItem }) {
 
 	const filteredItems = inventory.filter(filterItems);
 
+	const generateBarcode = () => {
+		const uuid = uuidv4();
+
+		const part1 = uuid.slice(0, 3);
+		const part2 = uuid.slice(9, 12);
+		const part3 = uuid.slice(14, 17);
+
+		return `${part1}-${part2}-${part3}`;
+	};
+
 	const handleAdd = async (e) => {
 		e.preventDefault();
-		dispatch(addInventoryItem(newItemData));
+
+		const barcode = generateBarcode();
+		console.log("Generated barcode ID:", barcode);
+
+		const newItemDataWithBarcodeId = {
+			...newItemData,
+			barcode,
+		};
+
+		console.log(
+			"Dispatching addInventoryItem with data:",
+			newItemDataWithBarcodeId
+		);
+		dispatch(addInventoryItem(newItemDataWithBarcodeId));
 		setNewItemData(initialItemData);
 	};
 

@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ReactSelect from "react-select";
+import {
+	fetchInventoryItemsByBarcode,
+	fetchInventoryItems,
+} from "../../actions/inventoryActions";
 
 function NewTransactionRow({
 	transactionData,
@@ -11,11 +15,18 @@ function NewTransactionRow({
 	const dateInputRef = useRef(null);
 	const inventory = useSelector((state) => state.inventory?.inventory || []);
 	const [items, setItems] = useState(transactionData.items || []);
+	const [barcodeSearch, setBarcodeSearch] = useState({});
+	const [searchByBarcodeId, setSearchByBarcodeId] = useState({});
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchInventoryItems());
+	}, [dispatch]);
 
 	useEffect(() => {
 		const currentDate = new Date();
 		const formattedDate = currentDate
-			.toLocaleString("en-US", {
+			.toLocaleString("fr-FR", {
 				weekday: "long",
 				year: "numeric",
 				month: "2-digit",
@@ -89,6 +100,27 @@ function NewTransactionRow({
 		updateTotalAmount(updatedItems);
 	};
 
+	const handleBarcodeIDSearch = (index) => {
+		const barcode = barcodeSearch[index]; // Use the barcode specific to the item index
+		if (!barcode || !barcode.trim()) return; // Early return if barcode is empty
+
+		const selectedProduct = inventory.find(
+			(product) => product.barcode === barcode
+		); // Search for the product in the inventory state
+		if (selectedProduct) {
+			const updatedItems = [...items];
+			updatedItems[index] = {
+				...updatedItems[index],
+				inventoryItem: selectedProduct,
+				finalUnitPrice: selectedProduct.retailPrice,
+			};
+			setItems(updatedItems); // Update the items state with the new product details
+			updateTotalAmount(updatedItems); // Update the total amount
+		} else {
+			console.log("No product found with the given barcode.");
+		}
+	};
+
 	return (
 		<>
 			<tr>
@@ -154,109 +186,191 @@ function NewTransactionRow({
 								{items.map((item, index) => (
 									<tr key={index}>
 										<td>
-											<ReactSelect
-												value={
-													item.inventoryItem
-														? {
-																value: item
-																	.inventoryItem
-																	.id,
-																label: item
-																	.inventoryItem
-																	.product
-																	.name,
-														  }
-														: null
-												}
-												onChange={(selectedOption) =>
-													handleProductSelect(
-														index,
-														selectedOption.value
-													)
-												}
-												options={inventory.map(
-													(invItem) => ({
-														value: invItem.id,
-														label: invItem.product
-															.name,
-													})
-												)}
-												placeholder="Select Product"
-												menuPortalTarget={document.body}
-												styles={{
-													menuPortal: (base) => ({
-														...base,
-														zIndex: 9999,
-													}),
-												}}
-											/>
-										</td>
-										<td className="quantity-controls">
-											<button
-												aria-label="Decrease quantity"
-												className="quantity-decrement"
-												type="button"
-												onClick={() => {
-													handleItemChange(
-														index,
-														"quantitySold",
-														Math.max(
-															0,
-															item.quantitySold -
-																1
-														)
-													);
-												}}
-											>
-												<i className="fas fa-minus"></i>
-											</button>
-											<input
-												className="quantity-input"
-												type="number"
-												value={item.quantitySold}
-												onChange={(e) =>
-													handleItemChange(
-														index,
-														"quantitySold",
-														parseInt(e.target.value)
-													)
-												}
-												max={
-													item.inventoryItem
-														?.stockQuantity || 0
-												}
-											/>
-											<button
-												aria-label="Increase quantity"
-												className="quantity-increment"
-												type="button"
-												onClick={() => {
-													handleItemChange(
-														index,
-														"quantitySold",
-														item.quantitySold + 1
-													);
-												}}
-											>
-												<i className="fas fa-plus"></i>
-											</button>
-											{item.inventoryItem
-												?.stockQuantity && (
-												<span>
-													{" "}
-													/{" "}
-													{
+											<div className="product-selection-container">
+												<ReactSelect
+													className="product-select"
+													value={
+														item.inventoryItem &&
 														item.inventoryItem
-															?.stockQuantity
+															.product
+															? {
+																	value: item
+																		.inventoryItem
+																		.id,
+																	label: item
+																		.inventoryItem
+																		.product
+																		.name,
+															  }
+															: null
 													}
-												</span>
-											)}
+													onChange={(
+														selectedOption
+													) =>
+														handleProductSelect(
+															index,
+															selectedOption.value
+														)
+													}
+													options={inventory.map(
+														(invItem) => ({
+															value: invItem.id,
+															label: invItem
+																.product.name,
+														})
+													)}
+													placeholder="Select Product"
+													menuPortalTarget={
+														document.body
+													}
+													styles={{
+														menuPortal: (base) => ({
+															...base,
+															zIndex: 9999,
+														}),
+													}}
+												/>
+												<button
+													className="barcode-button"
+													onClick={() => {
+														setSearchByBarcodeId(
+															(prev) => ({
+																...prev,
+																[index]:
+																	!prev[
+																		index
+																	],
+															})
+														);
+														setBarcodeSearch(
+															(prev) => ({
+																...prev,
+																[index]: "",
+															})
+														);
+													}}
+												>
+													<i className="fa-solid fa-barcode"></i>
+												</button>
+												<button className="expand-button">
+													<i className="fa-solid fa-expand"></i>
+												</button>
+											</div>
+											<div className="barcode-search-container">
+												{searchByBarcodeId[index] && (
+													<>
+														<input
+															className="barcode-search-input"
+															type="text"
+															placeholder="Enter barcode ID"
+															value={
+																barcodeSearch[
+																	index
+																] || ""
+															}
+															onChange={(e) =>
+																setBarcodeSearch(
+																	{
+																		...barcodeSearch,
+																		[index]:
+																			e
+																				.target
+																				.value,
+																	}
+																)
+															}
+														/>
+														<button
+															className="search-button"
+															onClick={() =>
+																handleBarcodeIDSearch(
+																	index
+																)
+															}
+														>
+															<i className="fa-solid fa-magnifying-glass"></i>
+														</button>
+													</>
+												)}
+											</div>
+										</td>
+										<td>
+											<div className="quantity-controls">
+												<button
+													aria-label="Decrease quantity"
+													className="quantity-decrement"
+													type="button"
+													onClick={() => {
+														handleItemChange(
+															index,
+															"quantitySold",
+															Math.max(
+																0,
+																item.quantitySold -
+																	1
+															)
+														);
+													}}
+												>
+													<i className="fas fa-minus"></i>
+												</button>
+												<input
+													className="quantity-input"
+													type="number"
+													value={item.quantitySold}
+													onChange={(e) =>
+														handleItemChange(
+															index,
+															"quantitySold",
+															parseInt(
+																e.target.value
+															)
+														)
+													}
+													max={
+														item.inventoryItem
+															?.stockQuantity || 0
+													}
+												/>
+												<button
+													aria-label="Increase quantity"
+													className="quantity-increment"
+													type="button"
+													onClick={() => {
+														handleItemChange(
+															index,
+															"quantitySold",
+															item.quantitySold +
+																1
+														);
+													}}
+												>
+													<i className="fas fa-plus"></i>
+												</button>
+												{item.inventoryItem
+													?.stockQuantity && (
+													<span>
+														{" "}
+														/{" "}
+														{
+															item.inventoryItem
+																?.stockQuantity
+														}
+													</span>
+												)}
+											</div>
 										</td>
 										<td>
 											<input
 												type="number"
 												value={item.finalUnitPrice}
-												readOnly
+												onChange={(e) =>
+													handleItemChange(
+														index,
+														"finalUnitPrice",
+														parseInt(e.target.value)
+													)
+												}
 											/>{" "}
 											$
 										</td>

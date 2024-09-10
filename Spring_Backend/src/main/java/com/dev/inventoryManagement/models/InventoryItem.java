@@ -31,4 +31,6 @@ public class InventoryItem {
     private double vendorCost;
     
     private double retailPrice;
+
+    private String barcode;
 }

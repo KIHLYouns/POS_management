@@ -56,4 +56,13 @@ public class InventoryController {
         inventoryService.deleteInventoryItem(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/barcode/{barcode}")
+    public ResponseEntity<InventoryItem> getInventoryItemByBarcode(
+            @PathVariable String barcode
+    ) {
+        return inventoryService.getInventoryItemByBarcode(barcode)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

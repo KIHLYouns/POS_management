@@ -42,6 +42,16 @@ export const fetchInventoryItems = () => async dispatch => {
   }
 };
 
+export const fetchInventoryItemsByBarcode = (barcode) => async dispatch => {
+  dispatch({ type: FETCH_INVENTORY_BEGIN });
+  try {
+    const { data } = await apiCall('get', `inventory/barcode/${barcode}`);
+    dispatch({ type: FETCH_INVENTORY_SUCCESS, payload: { inventory: data } });
+  } catch (error) {
+    dispatch({ type: FETCH_INVENTORY_FAILURE, payload: { error } });
+  }
+}
+
 export const addInventoryItem = (inventoryData) => async dispatch => {
   dispatch({ type: ADD_INVENTORY_ITEM_BEGIN });
   try {
