@@ -43,12 +43,6 @@ function Sidebar() {
 				<i className="fas fa-clipboard-list"></i> Orders
 			</NavLink>
 			<NavLink
-				to="/invoices"
-				className={({ isActive }) => (isActive ? "active" : undefined)}
-			>
-				<i className="fas fa-file-invoice-dollar"></i> Invoices
-			</NavLink>
-			<NavLink
 				to="/inventory"
 				className={({ isActive }) => (isActive ? "active" : undefined)}
 			>

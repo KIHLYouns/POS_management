@@ -22,18 +22,16 @@ function InventoryTable({ addingItem, setAddingItem }) {
 
 	const initialItemData = {
 		product: {},
-		stockQuantity: 0,
-		vendorCost: 0,
-		retailPrice: 0,
+		stockQuantity: null,
+		vendorCost: null,
+		retailPrice: null,
 	};
 	const [newItemData, setNewItemData] = useState(initialItemData);
 	const [editingId, setEditingId] = useState(null);
 	const [editFormData, setEditFormData] = useState(initialItemData);
 
 	const dispatch = useDispatch();
-	const inventoryState = useSelector(
-		(state) => state.inventory || { inventory: [], loading: false }
-	);
+	const inventoryState = useSelector((state) => state.inventory || { inventory: [], loading: false });
 	const { products, categories } = useSelector((state) => state.products);
 
 	const { inventory, loading } = inventoryState;
@@ -52,9 +50,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 	const filterItems = (item) => {
 		const productName = item.product?.name?.toLowerCase() || "";
 
-		const matchesName = searchQuery.toLowerCase()
-			? productName.includes(searchQuery.toLowerCase().trim())
-			: true;
+		const matchesName = searchQuery.toLowerCase() ? productName.includes(searchQuery.toLowerCase().trim()) : true;
 		const matchesCategory = categorySearchQuery.toLowerCase()
 			? item.product.category.id.toString() === categorySearchQuery
 			: true;
@@ -85,10 +81,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 			barcode,
 		};
 
-		console.log(
-			"Dispatching addInventoryItem with data:",
-			newItemDataWithBarcodeId
-		);
+		console.log("Dispatching addInventoryItem with data:", newItemDataWithBarcodeId);
 		dispatch(addInventoryItem(newItemDataWithBarcodeId));
 		setNewItemData(initialItemData);
 	};
@@ -172,9 +165,7 @@ function InventoryTable({ addingItem, setAddingItem }) {
 				searchQuery={searchQuery}
 				onSearchChange={(e) => setSearchQuery(e.target.value)}
 				categorySearchQuery={categorySearchQuery}
-				onCategorySearchQuery={(e) =>
-					setCategorySearchQuery(e.target.value)
-				}
+				onCategorySearchQuery={(e) => setCategorySearchQuery(e.target.value)}
 			/>
 			<TableTemplate
 				columns={[

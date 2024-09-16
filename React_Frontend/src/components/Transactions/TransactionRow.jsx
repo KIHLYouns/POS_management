@@ -41,6 +41,7 @@ const ActionButtons = ({
 	onDelete,
 	onToggleExpand,
 	isExpanded,
+	onPrintReceipt
 }) => (
 	<td className="action-buttons">
 		{isEditing ? (
@@ -69,6 +70,10 @@ const ActionButtons = ({
 				<button onClick={onDelete} className="delete">
 					<i className="fas fa-trash"></i>
 					Delete
+				</button>
+				<button onClick={onPrintReceipt} className="print">
+					<i className="fas fa-print"></i>
+					Print
 				</button>
 			</>
 		)}
@@ -218,6 +223,7 @@ const TransactionRow = ({
 	onCancelEdit,
 	onDelete,
 	onEdit,
+	onPrintReceipt
 }) => (
 	<>
 		<tr>
@@ -238,6 +244,7 @@ const TransactionRow = ({
 				onDelete={onDelete}
 				onToggleExpand={onExpandToggle}
 				isExpanded={isExpanded}
+				onPrintReceipt={onPrintReceipt}
 			/>
 		</tr>
 		{isExpanded && (

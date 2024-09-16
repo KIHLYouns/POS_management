@@ -192,12 +192,14 @@ public class TransactionService {
         if (transactionOptional.isPresent()) {
             Transaction transaction = transactionOptional.get();
             
-            // Adjust inventory quantity for each transaction item
+            // Adjust inventory quantity for each transaction item, ensuring item is not null
             transaction.getItems().forEach(item -> {
-                InventoryItem inventoryItem = item.getInventoryItem();
-                int adjustedQuantity = inventoryItem.getStockQuantity() + item.getQuantitySold();
-                inventoryItem.setStockQuantity(adjustedQuantity);
-                inventoryItemRepository.save(inventoryItem);
+                if (item != null && item.getInventoryItem() != null) {
+                    InventoryItem inventoryItem = item.getInventoryItem();
+                    int adjustedQuantity = inventoryItem.getStockQuantity() + item.getQuantitySold();
+                    inventoryItem.setStockQuantity(adjustedQuantity);
+                    inventoryItemRepository.save(inventoryItem);
+                }
             });
             
             // Delete the transaction

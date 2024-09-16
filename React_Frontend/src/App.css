@@ -1,61 +1,51 @@
-/* General styles */
 body {
-	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-		"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-	height: 100vh;
+	font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana,
+		sans-serif;
+	height: 100%;
 	width: 100vw;
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
 	color: #333;
-	/* Remove transition for dark mode color */
+    overflow-y: auto;
 }
-
 .fas {
 	font-size: 20px;
 	margin-inline: 8px;
 }
-
 img {
 	height: 20px;
 	margin-right: 10px;
 }
-
 .containerx {
 	display: flex;
 	height: 100vh;
 	width: 100%;
-	overflow: hidden;
 }
-
-/* Sidebar Styles */
 .sidebar {
 	width: 15%;
 	flex-shrink: 0;
 	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 	height: 100%;
 	background-color: #f5f5f5;
-	/* Remove transition for sidebar background */
+	overflow-y: hidden;
+	position: fixed;
+	padding-top: 80px;
 }
-
 .sidebar h3 {
 	font-size: 14px;
 	margin-bottom: 10px;
 	text-transform: uppercase;
 	color: #a4a6a9;
-	/* Remove transition for sidebar heading color */
 }
-
 .sidebar a {
 	display: flex;
 	align-items: center;
 	text-decoration: none;
-	/* Remove transition for sidebar link color */
 	padding: 13px 20px;
 	color: #a4a6a9;
 }
-
 .sidebar a.active,
 .sidebar a:hover {
 	color: #fff;
@@ -63,7 +53,6 @@ img {
 	background-color: #f4bc87;
 }
 
-/* Header Styles */
 .header {
 	display: flex;
 	justify-content: space-between;
@@ -73,14 +62,11 @@ img {
 	width: 100%;
 	padding: 20px;
 	background-color: #fff;
-	/* Remove transition for header background */
 }
-
 .header .logo img,
 .header .search-box img {
 	height: 40px;
 }
-
 .header .search-box {
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -89,7 +75,6 @@ img {
 	background-color: #fff;
 	transition: border-color 0.3s;
 }
-
 .filters .search-box-filter input,
 .header .search-box input {
 	border: none;
@@ -97,26 +82,20 @@ img {
 	flex-grow: 1;
 	font-size: 14px;
 	color: #333;
-	/* Remove transition for input color */
 }
-
 .header .user-profile img {
 	height: 40px;
 	border-radius: 50%;
 }
-
 .user-profile {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 }
-
-/* Button Styles */
 .buttons {
 	display: flex;
 	gap: 10px;
 }
-
 .buttons button,
 .filters button.filter-button {
 	border-radius: 5px;
@@ -131,24 +110,19 @@ img {
 	padding: 10px 20px;
 	background-color: #fff;
 }
-
 .buttons button:hover,
 .filters button.filter-button:hover {
 	color: #fff;
 	background-color: #666;
 }
-
 .buttons button img,
 .filters button.filter-button img {
-	filter: invert(47%) sepia(79%) saturate(472%) hue-rotate(333deg)
-		brightness(101%) contrast(101%);
+	filter: invert(47%) sepia(79%) saturate(472%) hue-rotate(333deg) brightness(101%) contrast(101%);
 }
-
-/* Table Styles */
 .table-container {
 	border: 1px solid #ddd;
 	border-radius: 10px;
-	margin-top: 20px;
+	margin: 20px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 	box-sizing: border-box;
 	overflow-x: auto;
@@ -157,15 +131,12 @@ img {
 	overflow-y: scroll;
 	padding: 20px;
 	background-color: #fff;
-	/* Remove transition for table container background */
 }
-
 table {
 	width: 100%;
 	border-collapse: collapse;
 	table-layout: fixed;
 }
-
 .table-header {
 	display: flex;
 	justify-content: space-between;
@@ -175,16 +146,12 @@ table {
 	top: -20px;
 	z-index: 2;
 	background-color: #fff;
-	/* Remove transition for table header background */
 }
-
 td,
 th {
 	text-align: center;
 	padding: 10px;
-	/* Remove transition for table cell color */
 }
-
 th {
 	border-bottom: 1px solid #ddd;
 	color: #666;
@@ -192,25 +159,19 @@ th {
 	top: 20px;
 	z-index: 1;
 	background-color: #f5f5f5;
-	/* Remove transition for table header background */
 }
-
 th.No:nth-child(1) {
 	width: 5%;
 	min-width: 5%;
 	max-width: 5%;
 }
-
 th:nth-child(6) {
 	width: 28%;
 }
-
 td {
 	border-bottom: 1px solid #f5f5f5;
 	color: #333;
-	/* Remove transition for table cell background */
 }
-
 .filters .search-box-filter {
 	display: flex;
 	align-items: center;
@@ -222,7 +183,6 @@ td {
 	background-color: #fff;
 	transition: border-color 0.3s;
 }
-
 .action-buttons button {
 	margin-right: 5px;
 	font-size: 14px;
@@ -233,34 +193,26 @@ td {
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 }
-
 .action-buttons .fas {
 	font-size: 14px;
 }
-
 .action-buttons button.view {
 	color: #fff;
 	background-color: #28a745;
 }
-
 .action-buttons button.edit {
 	color: #fff;
 	background-color: #ffc107;
 }
-
 .action-buttons button.delete {
 	color: #fff;
 	float: right;
 	background-color: #dc3545;
 }
-
-/* Dark Mode Styles */
 body.dark-mode {
 	background-color: #121212;
 	color: #fff;
-	/* Remove transition for dark mode color */
 }
-
 .dark-mode .header,
 .dark-mode .main-content,
 .dark-mode .table-container,
@@ -268,34 +220,28 @@ body.dark-mode {
 	background-color: #333;
 	color: #fff;
 }
-
 .dark-mode .sidebar a.active,
 .dark-mode .sidebar a:hover {
 	background-color: #f4bc87;
 	color: #fff;
 }
-
 .dark-mode .search-box-filter input,
 .dark-mode select.category-select {
 	background-color: #444;
 	color: #fff;
 }
-
 .dark-mode .buttons button:hover,
 .dark-mode .filters button.filter-button:hover {
 	background-color: #555;
 }
-
 .dark-mode .cancel i,
 .dark-mode .save i {
 	color: #444;
 }
-
 .dark-mode .search-box-filter,
 .dark-mode .sidebar {
 	background-color: #444;
 }
-
 .dark-mode .buttons button,
 .dark-mode .filters button.filter-button,
 .dark-mode td,
@@ -303,41 +249,33 @@ body.dark-mode {
 	background-color: #444;
 	color: #fff;
 }
-
 .dark-mode .sidebar a,
 .dark-mode .sidebar h3,
 .dark-mode .table-title h3,
 .dark-mode a {
 	color: #fff;
 }
-
 .dark-mode .transaction-items td,
 .dark-mode th {
 	background-color: #555;
 	align-content: center;
 }
-
-/* Filter Options Styles */
 .filter-options {
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding-inline: 10px;
 }
-
 .category-select {
 	border-radius: 5px;
 	border: 1px solid #ced4da;
 	padding: 5px 10px;
 	transition: border-color 0.3s;
 }
-
-/* Refresh Button Styles */
 .refresh-container {
 	align-items: center;
 	justify-content: flex-start;
 }
-
 .button-fetch {
 	color: #fff;
 	border: none;
@@ -351,11 +289,9 @@ body.dark-mode {
 	background-color: #e9c916;
 	transition: background-color 0.3s;
 }
-
 .button-fetch:hover {
 	background-color: #bba212;
 }
-
 .spinner {
 	display: inline-block;
 	width: 20px;
@@ -367,29 +303,21 @@ body.dark-mode {
 	margin-left: 10px;
 	vertical-align: middle;
 }
-
-/* Expanded Row Content Styles */
 .expanded-row-content {
 	padding: 10px;
 	background-color: #fff;
 }
-
-/* Transaction Items Styles */
 .transaction-items {
 	margin-top: 10px;
 	background-color: #f0f0f0;
 }
-
 .expanded-row-content td {
-    border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
-
 .transaction-items .th {
 	text-align: center;
 	padding: 8px;
 }
-
-/* Common Styles */
 .filters,
 .header .logo,
 .header .search-box,
@@ -397,36 +325,28 @@ body.dark-mode {
 	display: flex;
 	align-items: center;
 }
-
 .logo-text,
 .table-title h3 {
 	margin: 0;
 }
-
-/* Add New Button Styles */
 .buttons button.addNew,
 .dark-mode .buttons button.addNew {
 	color: #fff;
 	background-color: #f4bc87;
 	transition: background-color 0.3s;
 }
-
 .buttons button.addNew:hover,
 .dark-mode .buttons button.addNew:hover {
 	background-color: #f09b4f;
 }
-
-/* Spin Animation */
 @keyframes spin {
 	0% {
-		transform: rotate(0deg);
+		transform: rotate(0);
 	}
 	100% {
 		transform: rotate(360deg);
 	}
 }
-
-/* Quantity Controls Styles */
 .quantity-controls,
 .quantity-decrement,
 .quantity-increment,
@@ -434,9 +354,8 @@ body.dark-mode {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-    gap: 5px;
+	gap: 5px;
 }
-
 .quantity-decrement,
 .quantity-increment {
 	background-color: #f0f0f0;
@@ -446,12 +365,10 @@ body.dark-mode {
 	padding: 2px;
 	transition: background-color 0.2s ease-in-out;
 }
-
 .quantity-decrement:hover,
 .quantity-increment:hover {
 	background-color: #e0e0e0;
 }
-
 .quantity-input {
 	width: 80px;
 	padding: 5px;
@@ -460,18 +377,14 @@ body.dark-mode {
 	text-align: center;
 	transition: border-color 0.2s ease-in-out;
 }
-
 .quantity-input:focus {
 	border-color: #007bff;
-	outline: none;
+	outline: 0;
 }
-
-/* Input and Select Styles */
 input[type="number"] {
 	width: 80px;
 	text-align: center;
 }
-
 table input[type="text"],
 table select {
 	width: 60%;
@@ -483,154 +396,159 @@ table select {
 	text-align: center;
 	transition: border-color 0.3s;
 }
-
-/* Dashboard Specific Styles */
 .dashboard-content {
 	display: flex;
-	gap: 20px;
-	flex-wrap: wrap; /* Allow charts to wrap to the next line */
+	flex-wrap: wrap;
 }
-
 .kpi-container {
 	display: flex;
-	gap: 20px;
-	width: 100%; /* Make KPIs take up full width */
+	justify-content: space-around;
+	margin-inline: 10px;
+	width: 100%;
 }
-
 .kpi {
-	background-color: #fff;
+	background-color: #f0f0f0;
 	border-radius: 10px;
-	padding: 20px;
+	padding: 10px;
+	margin: 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	flex: 1;
-	/* Remove transition for KPI background */
-	width: calc(50% - 10px); /* Adjust KPI width for better layout */
-	text-align: center; /* Center text within KPI */
-	margin-bottom: 10px; /* Add space between KPIs */
+	width: calc(50% - 10px);
+	text-align: center;
+	margin-bottom: 10px;
 }
-
 .chart-container {
 	display: flex;
-	gap: 20px;
-	width: 100%; /* Make charts take up full width */
-	flex-wrap: wrap; /* Allow charts to wrap to the next line */
+	justify-content: space-around;
+	margin-inline: 10px;
+	width: 100%;
+	flex-wrap: wrap;
 }
-
 .chart {
-	background-color: #fff;
+	background-color: #f0f0f0;
 	border-radius: 10px;
 	padding: 20px;
+	margin: 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	flex: 1;
-	/* Remove transition for chart background */
-	width: calc(33.33% - 20px); /* Make charts take full width */
-	margin-bottom: 10px; /* Add space between charts */
+	width: calc(33.33% - 20px);
+	margin-bottom: 10px;
 }
-
 .chart h3 {
 	margin-bottom: 10px;
-	/* Remove transition for chart title color */
 }
-
-/* Recharts Styles (adjust as needed) */
-.recharts-wrapper {
-	width: 100%;
-	height: 100%;
-}
-
-.recharts-cartesian-axis-tick-value {
-	font-size: 12px;
-	/* Remove transition for axis tick value color */
-}
-
 .recharts-tooltip-label {
-	font-weight: bold;
-	/* Remove transition for tooltip label color */
+	font-weight: 700;
 }
-
 .recharts-pie-label-line {
-	stroke: #8884d8; /* Customize pie label line color */
+	stroke: #8884d8;
 }
-
 .recharts-pie-label-text {
 	font-size: 14px;
-	/* Remove transition for pie label text color */
 }
-
-/* Dark Mode Styles for Dashboard Components */
-.dark-mode .dashboard-content,
-.dark-mode .kpi-container,
-.dark-mode .kpi,
+.dark-mode .chart,
 .dark-mode .chart-container,
-.dark-mode .chart {
+.dark-mode .dashboard-content,
+.dark-mode .kpi,
+.dark-mode .kpi-container {
 	background-color: #333;
 	color: #fff;
 }
+.dark-mode .chart,
+.dark-mode .kpi {
+	background-color: #444;
+	color: #fff;
+}
 
-.dark-mode .kpi p,
+.dark-mode .recharts-layer.recharts-cartesian-axis.recharts-yAxis.yAxis tspan {
+	fill: #fff; /* Adjusts text color for Y axis labels */
+}
+
+.dark-mode .recharts-layer.recharts-cartesian-axis.recharts-xAxis.xAxis tspan {
+	fill: #fff; /* Adjusts text color for X axis labels */
+}
 .dark-mode .chart h3,
-.dark-mode .recharts-cartesian-axis-tick-value,
+.dark-mode .kpi p,
 .dark-mode .recharts-pie-label-text {
 	color: #fff;
 }
-
 .dark-mode .recharts-tooltip-label {
-	color: #fff;
+	color: #666;
 }
-
-/* Responsive Styles */
 @media (max-width: 1200px) {
-	/* For larger screens, allow three charts per row */
 	.chart {
 		width: calc(33.33% - 20px);
 	}
 }
-
 @media (max-width: 768px) {
-	/* For smaller screens, stack KPIs and charts vertically */
-	.kpi-container,
-	.chart-container {
+	.chart-container,
+	.kpi-container {
 		flex-direction: column;
 	}
-
-	.kpi,
-	.chart {
-		width: 100%; /* Make KPIs and charts full width on smaller screens */
+	.chart,
+	.kpi {
+		width: 100%;
 		margin-bottom: 20px;
 	}
 }
-.product-selection-container {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 5px; /* Space between the select and the barcode input */
-}
-
-.product-select {
-	flex-grow: 1;
-	margin-right: 5px; /* Space between the select and the first button */
-}
-
-.barcode-button,
-.expand-button {
-	margin-left: 5px; /* Space between buttons */
-	background: none;
-	border: none;
-	cursor: pointer;
-}
-
+.product-selection-container,
 .barcode-search-container {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 5px;
 }
-
-.barcode-search-input {
+.product-select {
 	flex-grow: 1;
-	margin-right: 5px; /* Space between the input and the search button */
+	margin-right: 5px;
 }
-
+.barcode-button,
+.expand-button,
 .search-button {
-	background: none;
+	margin-left: 5px;
+	background: 0 0;
 	border: none;
 	cursor: pointer;
+	color: #444;
+}
+.barcode-search-input {
+	flex-grow: 1;
+	margin-right: 5px;
+}
+.dashboard-content .filter-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-inline: 10px;
+	width: 100%;
+}
+.dashboard-content .filter-container input {
+	margin: 10px;
+}
+.dashboard-content .filter-container .react-datepicker__input-container input {
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 250px;
+}
+.dashboard-content .filter-container .react-datepicker__day--selected {
+	background-color: #f4bc87;
+	color: white;
+}
+.main-content {
+	padding-left: 15%; /* Match the width of the sidebar */
+	padding-top: 80px;
+}
+.main-header{
+	position: fixed;
+	width: 100%;
+	z-index: 1000;
+}
+.dark-mode body {
+	background-color: #333;
+}
+.dark-mode  .expand-button i,
+.dark-mode .barcode-button i,
+.dark-mode .search-button i {
+	color: #fff;
 }

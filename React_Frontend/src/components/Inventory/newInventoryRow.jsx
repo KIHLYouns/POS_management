@@ -1,17 +1,7 @@
 import React from "react";
 
-function NewInventoryRow({
-	newItemData,
-	setNewItemData,
-	addingRow,
-	products,
-	existingProducts,
-	handleAdd,
-	cancelAdd,
-}) {
-	const availableProducts = products.filter(
-		(product) => !existingProducts.includes(product.id)
-	);
+function NewInventoryRow({ newItemData, setNewItemData, addingRow, products, existingProducts, handleAdd, cancelAdd }) {
+	const availableProducts = products.filter((product) => !existingProducts.includes(product.id));
 	return (
 		addingRow && (
 			<tr>
@@ -26,6 +16,9 @@ function NewInventoryRow({
 							});
 						}}
 					>
+						<option value="" disabled selected={!newItemData.product.id}>
+							Select a product
+						</option>
 						{availableProducts && availableProducts.length > 0 ? (
 							availableProducts.map((product) => (
 								<option key={product.id} value={product.id}>
@@ -91,10 +84,7 @@ function NewInventoryRow({
 								return;
 							}
 
-							if (
-								newItemData.vendorCost <= 0 ||
-								newItemData.retailPrice <= 0
-							) {
+							if (newItemData.vendorCost <= 0 || newItemData.retailPrice <= 0) {
 								alert("Please enter valid costs.");
 								return;
 							}

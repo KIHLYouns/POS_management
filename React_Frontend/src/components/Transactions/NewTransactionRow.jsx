@@ -1,17 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ReactSelect from "react-select";
-import {
-	fetchInventoryItemsByBarcode,
-	fetchInventoryItems,
-} from "../../actions/inventoryActions";
+import Quagga from "quagga";
+import BarcodeReader from "react-barcode-reader";
+import { fetchInventoryItemsByBarcode, fetchInventoryItems } from "../../actions/inventoryActions";
 
-function NewTransactionRow({
-	transactionData,
-	setTransactionData,
-	onAdd,
-	onCancel,
-}) {
+function NewTransactionRow({ transactionData, setTransactionData, onAdd, onCancel }) {
 	const dateInputRef = useRef(null);
 	const inventory = useSelector((state) => state.inventory?.inventory || []);
 	const [items, setItems] = useState(transactionData.items || []);
@@ -25,17 +19,13 @@ function NewTransactionRow({
 
 	useEffect(() => {
 		const currentDate = new Date();
-		const formattedDate = currentDate
-			.toLocaleString("fr-FR", {
-				weekday: "long",
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-				hour: "2-digit",
-				minute: "2-digit",
-				hour12: false,
-			})
-			.replace(/\//g, "-");
+		const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}/${(currentDate.getMonth() + 1)
+			.toString()
+			.padStart(2, "0")}/${currentDate.getFullYear().toString().substr(-2)} ${currentDate
+			.getHours()
+			.toString()
+			.padStart(2, "0")}:${currentDate.getMinutes().toString().padStart(2, "0")}`;
+
 		setTransactionData((prevData) => ({
 			...prevData,
 			date: formattedDate,
@@ -54,9 +44,7 @@ function NewTransactionRow({
 	};
 
 	const handleProductSelect = (index, selectedProductId) => {
-		const selectedProduct = inventory.find(
-			(product) => product.id === parseInt(selectedProductId)
-		);
+		const selectedProduct = inventory.find((product) => product.id === parseInt(selectedProductId));
 		if (selectedProduct) {
 			const updatedItems = [...items];
 			updatedItems[index] = {
@@ -72,8 +60,7 @@ function NewTransactionRow({
 	const handleItemChange = (index, field, value) => {
 		const updatedItems = [...items];
 		if (field === "quantitySold") {
-			const maxQuantity =
-				updatedItems[index].inventoryItem?.stockQuantity || 0;
+			const maxQuantity = updatedItems[index].inventoryItem?.stockQuantity || 0;
 			value = Math.min(parseInt(value) || 0, maxQuantity);
 		}
 		updatedItems[index][field] = value;
@@ -83,8 +70,7 @@ function NewTransactionRow({
 
 	const updateTotalAmount = (updatedItems) => {
 		const newTotalAmount = updatedItems.reduce(
-			(total, item) =>
-				total + (item.quantitySold || 0) * (item.finalUnitPrice || 0),
+			(total, item) => total + (item.quantitySold || 0) * (item.finalUnitPrice || 0),
 			0
 		);
 		setTransactionData((prevData) => ({
@@ -100,13 +86,15 @@ function NewTransactionRow({
 		updateTotalAmount(updatedItems);
 	};
 
-	const handleBarcodeIDSearch = (index) => {
-		const barcode = barcodeSearch[index]; // Use the barcode specific to the item index
-		if (!barcode || !barcode.trim()) return; // Early return if barcode is empty
+	const handleBarcodeIDSearch = (index, barcode) => {
+		// Step 1: Check for valid input
+		if (!barcode) {
+			console.error("Barcode is required for searching.");
+			return; // Exit the function if barcode is not provided
+		}
 
-		const selectedProduct = inventory.find(
-			(product) => product.barcode === barcode
-		); // Search for the product in the inventory state
+		// Step 2 & 3: Find the product and update the item
+		const selectedProduct = inventory.find((product) => product.barcode === barcode);
 		if (selectedProduct) {
 			const updatedItems = [...items];
 			updatedItems[index] = {
@@ -114,10 +102,102 @@ function NewTransactionRow({
 				inventoryItem: selectedProduct,
 				finalUnitPrice: selectedProduct.retailPrice,
 			};
-			setItems(updatedItems); // Update the items state with the new product details
-			updateTotalAmount(updatedItems); // Update the total amount
+			// Step 5: Update state
+			setItems(updatedItems);
+			// Step 6: Update total amount
+			updateTotalAmount(updatedItems);
 		} else {
+			// Step 4: Handle no product found
 			console.log("No product found with the given barcode.");
+		}
+	};
+
+	const handleScanBarcodeClick = (index) => {
+		// Check if browser supports getUserMedia
+		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+			// Create modal for video stream
+			const modal = document.createElement("div");
+			modal.style.position = "fixed";
+			modal.style.top = "0";
+			modal.style.left = "0";
+			modal.style.width = "100%";
+			modal.style.height = "100%";
+			modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+			modal.style.display = "flex";
+			modal.style.justifyContent = "center";
+			modal.style.alignItems = "center";
+			modal.style.zIndex = "10000";
+
+			// Create video element
+			const video = document.createElement("video");
+			video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+			video.style.maxWidth = "90%";
+			video.style.maxHeight = "80%";
+
+			// Append video to modal and modal to body
+			modal.appendChild(video);
+			document.body.appendChild(modal);
+
+			// Define constraints for the video stream (use the rear camera if available)
+			const constraints = { video: { facingMode: "environment" } };
+
+			// Access the camera stream
+			navigator.mediaDevices
+				.getUserMedia(constraints)
+				.then((stream) => {
+					video.srcObject = stream;
+					video.play();
+
+					// Configure Quagga for live stream scanning
+					Quagga.init(
+						{
+							inputStream: {
+								type: "LiveStream",
+								constraints: {
+									facingMode: "environment",
+								},
+								target: video, // Pass the video element as the target for the live stream
+							},
+							decoder: {
+								readers: ["code_128_reader"], // Specify barcode formats to decode
+							},
+						},
+						(err) => {
+							if (err) {
+								console.error(err);
+								alert("Error starting barcode scanner");
+								modal.remove();
+								return;
+							}
+							Quagga.start();
+						}
+					);
+
+					// Handle the detected barcode
+					Quagga.onDetected((result) => {
+						const barcode = result.codeResult.code;
+						handleBarcodeIDSearch(index, barcode);
+
+						// Stop Quagga and the camera stream
+						Quagga.stop();
+						stream.getTracks().forEach((track) => track.stop());
+
+						// Remove the modal
+						modal.remove();
+					});
+				})
+				.catch((err) => {
+					console.error("Error accessing the camera", err);
+					alert("Error accessing the camera");
+					modal.remove();
+				});
+
+			// Close modal on click
+			modal.addEventListener("click", () => {
+				modal.remove();
+			});
+		} else {
+			alert("Camera access is not supported by your browser.");
 		}
 	};
 
@@ -125,20 +205,10 @@ function NewTransactionRow({
 		<>
 			<tr>
 				<td>
-					<input
-						type="text"
-						ref={dateInputRef}
-						value={transactionData.date}
-						readOnly
-					/>
+					<input type="text" ref={dateInputRef} value={transactionData.date} readOnly />
 				</td>
 				<td>
-					<input
-						type="number"
-						value={transactionData.totalAmount}
-						readOnly
-					/>{" "}
-					$
+					<input type="number" value={transactionData.totalAmount} readOnly /> $
 				</td>
 				<td>
 					<div className="action-buttons">
@@ -190,39 +260,22 @@ function NewTransactionRow({
 												<ReactSelect
 													className="product-select"
 													value={
-														item.inventoryItem &&
-														item.inventoryItem
-															.product
+														item.inventoryItem && item.inventoryItem.product
 															? {
-																	value: item
-																		.inventoryItem
-																		.id,
-																	label: item
-																		.inventoryItem
-																		.product
-																		.name,
+																	value: item.inventoryItem.id,
+																	label: item.inventoryItem.product.name,
 															  }
 															: null
 													}
-													onChange={(
-														selectedOption
-													) =>
-														handleProductSelect(
-															index,
-															selectedOption.value
-														)
+													onChange={(selectedOption) =>
+														handleProductSelect(index, selectedOption.value)
 													}
-													options={inventory.map(
-														(invItem) => ({
-															value: invItem.id,
-															label: invItem
-																.product.name,
-														})
-													)}
+													options={inventory.map((invItem) => ({
+														value: invItem.id,
+														label: invItem.product.name,
+													}))}
 													placeholder="Select Product"
-													menuPortalTarget={
-														document.body
-													}
+													menuPortalTarget={document.body}
 													styles={{
 														menuPortal: (base) => ({
 															...base,
@@ -233,27 +286,23 @@ function NewTransactionRow({
 												<button
 													className="barcode-button"
 													onClick={() => {
-														setSearchByBarcodeId(
-															(prev) => ({
-																...prev,
-																[index]:
-																	!prev[
-																		index
-																	],
-															})
-														);
-														setBarcodeSearch(
-															(prev) => ({
-																...prev,
-																[index]: "",
-															})
-														);
+														setSearchByBarcodeId((prev) => ({
+															...prev,
+															[index]: !prev[index],
+														}));
+														setBarcodeSearch((prev) => ({
+															...prev,
+															[index]: "",
+														}));
 													}}
 												>
-													<i className="fa-solid fa-barcode"></i>
+													<i className="fas fa-barcode"></i>
 												</button>
-												<button className="expand-button">
-													<i className="fa-solid fa-expand"></i>
+												<button
+													className="scan-barcode-button"
+													onClick={() => handleScanBarcodeClick(index)}
+												>
+													Scan Barcode
 												</button>
 											</div>
 											<div className="barcode-search-container">
@@ -263,32 +312,19 @@ function NewTransactionRow({
 															className="barcode-search-input"
 															type="text"
 															placeholder="Enter barcode ID"
-															value={
-																barcodeSearch[
-																	index
-																] || ""
-															}
+															value={barcodeSearch[index] || ""}
 															onChange={(e) =>
-																setBarcodeSearch(
-																	{
-																		...barcodeSearch,
-																		[index]:
-																			e
-																				.target
-																				.value,
-																	}
-																)
+																setBarcodeSearch({
+																	...barcodeSearch,
+																	[index]: e.target.value,
+																})
 															}
 														/>
 														<button
 															className="search-button"
-															onClick={() =>
-																handleBarcodeIDSearch(
-																	index
-																)
-															}
+															onClick={() => handleBarcodeIDSearch(index)}
 														>
-															<i className="fa-solid fa-magnifying-glass"></i>
+															<i className="fas fa-magnifying-glass-plus"></i>
 														</button>
 													</>
 												)}
@@ -304,11 +340,7 @@ function NewTransactionRow({
 														handleItemChange(
 															index,
 															"quantitySold",
-															Math.max(
-																0,
-																item.quantitySold -
-																	1
-															)
+															Math.max(0, item.quantitySold - 1)
 														);
 													}}
 												>
@@ -322,41 +354,23 @@ function NewTransactionRow({
 														handleItemChange(
 															index,
 															"quantitySold",
-															parseInt(
-																e.target.value
-															)
+															parseInt(e.target.value)
 														)
 													}
-													max={
-														item.inventoryItem
-															?.stockQuantity || 0
-													}
+													max={item.inventoryItem?.stockQuantity || 0}
 												/>
 												<button
 													aria-label="Increase quantity"
 													className="quantity-increment"
 													type="button"
 													onClick={() => {
-														handleItemChange(
-															index,
-															"quantitySold",
-															item.quantitySold +
-																1
-														);
+														handleItemChange(index, "quantitySold", item.quantitySold + 1);
 													}}
 												>
 													<i className="fas fa-plus"></i>
 												</button>
-												{item.inventoryItem
-													?.stockQuantity && (
-													<span>
-														{" "}
-														/{" "}
-														{
-															item.inventoryItem
-																?.stockQuantity
-														}
-													</span>
+												{item.inventoryItem?.stockQuantity && (
+													<span> / {item.inventoryItem?.stockQuantity}</span>
 												)}
 											</div>
 										</td>
@@ -365,22 +379,13 @@ function NewTransactionRow({
 												type="number"
 												value={item.finalUnitPrice}
 												onChange={(e) =>
-													handleItemChange(
-														index,
-														"finalUnitPrice",
-														parseInt(e.target.value)
-													)
+													handleItemChange(index, "finalUnitPrice", parseInt(e.target.value))
 												}
 											/>{" "}
 											$
 										</td>
 										<td className="action-buttons">
-											<button
-												className="delete"
-												onClick={() =>
-													handleDeleteItem(index)
-												}
-											>
+											<button className="delete" onClick={() => handleDeleteItem(index)}>
 												<i className="fas fa-trash"></i>
 												Delete
 											</button>

@@ -1,177 +1,181 @@
-// React_Frontend/src/components/Dashboard/Dashboard.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    BarChart,
-    Bar,
-    PieChart,
-    Pie,
-    Cell,
-    ResponsiveContainer, // Added import for ResponsiveContainer
-} from "recharts";
 import { fetchTransactions } from "../../actions/transactionActions";
 import { fetchInventoryItems } from "../../actions/inventoryActions";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import DashboardKPIs from "./DashboardKPIs";
+import DashboardCharts from "./DashboardCharts";
 
 function Dashboard() {
-    const dispatch = useDispatch();
-    const inventory = useSelector((state) => state.inventory?.inventory || []);
-    const products = useSelector((state) => state.products?.products || []);
-    const transactions = useSelector(
-        (state) => state.transactions?.transactions || []
-    );
+	const dispatch = useDispatch();
+	const inventory = useSelector((state) => state.inventory?.inventory || []);
+	const transactions = useSelector((state) => state.transactions?.transactions || []);
 
-    // Calculate total inventory value
-    const totalInventoryValue = inventory.reduce((total, item) => {
-        return total + item.stockQuantity * item.retailPrice;
-    }, 0);
+	const [dateRange, setDateRange] = useState({
+		startDate: null,
+		endDate: null,
+	});
 
-    // Calculate total sales
-    const totalSales = transactions.reduce((total, transaction) => {
-        return total + transaction.totalAmount;
-    }, 0);
+	useEffect(() => {
+		dispatch(fetchTransactions());
+		dispatch(fetchInventoryItems());
+	}, [dispatch]);
 
-    // Prepare data for charts
-    const salesData = transactions.map((transaction) => ({
-        date: transaction.date,
-        amount: transaction.totalAmount,
-    }));
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			dispatch(fetchTransactions());
+			dispatch(fetchInventoryItems());
+		}, 5000);
 
-    const inventoryData = inventory.map((item) => ({
-        name: item.product.name,
-        quantity: item.stockQuantity,
-    }));
+		return () => clearInterval(intervalId);
+	}, [dispatch]);
 
-    // Calculate product sales by category
-    const categorySales = {};
-    transactions.forEach((transaction) => {
-        transaction.items.forEach((item) => {
-            const category = item.inventoryItem?.product?.category?.name; // Access category correctly
-            if (category) {
-                categorySales[category] =
-                    (categorySales[category] || 0) +
-                    item.quantitySold * item.finalUnitPrice;
-            }
-        });
-    });
+	const filteredTransactions = transactions.filter((transaction) => {
+		const date = new Date(transaction.date);
+		const startDate = dateRange.startDate ? new Date(dateRange.startDate) : null;
+		const endDate = dateRange.endDate ? new Date(dateRange.endDate) : null;
+		return (!startDate || date >= startDate) && (!endDate || date <= endDate);
+	});
 
-    // Prepare data for pie chart
-    const pieChartData = Object.entries(categorySales).map(
-        ([category, amount]) => ({
-            name: category,
-            value: amount,
-        })
-    );
+	const totalInventoryRetail = inventory.reduce((total, item) => total + item.stockQuantity * item.retailPrice, 0);
+	const totalInventoryCost = inventory.reduce((total, item) => total + item.stockQuantity * item.vendorCost, 0);
 
-    // Fetch data on mount
-    useEffect(() => {
-        dispatch(fetchTransactions());
-        dispatch(fetchInventoryItems());
-    }, [dispatch]);
+	const totalSales = filteredTransactions.reduce((total, transaction) => total + transaction.totalAmount, 0);
 
-    // Fetch updated data every 5 seconds
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            dispatch(fetchTransactions());
-            dispatch(fetchInventoryItems());
-        }, 5000);
+	const totalProfit = filteredTransactions.reduce((total, transaction) => {
+		const profit = transaction.items.reduce((acc, item) => {
+			const vendorCost = item.inventoryItem ? item.inventoryItem.vendorCost : 0;
+			return acc + (item.finalUnitPrice - vendorCost) * item.quantitySold;
+		}, 0);
+		return total + profit;
+	}, 0);
 
-        return () => clearInterval(intervalId);
-    }, [dispatch]);
+	const totalItemsSold = filteredTransactions.reduce(
+		(total, transaction) => total + transaction.items.reduce((acc, item) => acc + item.quantitySold, 0),
+		0
+	);
 
-    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF", "#FF1919", "#19FF19", "#1919FF", "#FF19FF", "#19FFFF"];
+	const topSellingProductsData = filteredTransactions.reduce((acc, transaction) => {
+		transaction.items.forEach((item) => {
+			const productName = item.inventoryItem?.product?.name;
+			if (productName) {
+				const quantitySold = item.quantitySold;
+				acc[productName] = (acc[productName] || 0) + quantitySold;
+			}
+		});
+		return acc;
+	}, {});
 
-    return (
-        <div className="main-content">
-            <div className="header">
-                <h2>Dashboard</h2>
-            </div>
-            <div className="dashboard-content">
-                <div className="kpi-container">
-                    <div className="kpi">
-                        <h3>Total Inventory Value</h3>
-                        <p>${totalInventoryValue.toFixed(2)}</p>
-                    </div>
-                    <div className="kpi">
-                        <h3>Total Sales</h3>
-                        <p>${totalSales.toFixed(2)}</p>
-                    </div>
-                </div>
+	const topSellingProductsChartData = Object.entries(topSellingProductsData)
+		.map(([name, quantitySold]) => ({ name, quantitySold }))
+		.sort((a, b) => b.quantitySold - a.quantitySold)
+		.slice(0, 5);
 
-                <div className="chart-container">
-                    <div className="chart">
-                        <h3>Sales Over Time</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart
-                                data={salesData}
-                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                            >
-                                <XAxis dataKey="date" />
-                                <YAxis />
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <Tooltip />
-                                <Legend />
-                                <Line
-                                    type="monotone"
-                                    dataKey="amount"
-                                    stroke="#8884d8"
-                                    activeDot={{ r: 8 }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className="chart">
-                        <h3>Inventory Levels</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart
-                                data={inventoryData}
-                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                            >
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="quantity" fill="#82ca9d" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className="chart">
-                        <h3>Sales by Category</h3>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <PieChart>
-                                <Pie
-                                    data={pieChartData}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    label
-                                >
-                                    {pieChartData.map((entry, index) => (
-                                        <Cell
-                                            key={`cell-${index}`}
-                                            fill={COLORS[index % COLORS.length]}
-                                        />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+	const profitabilityData = filteredTransactions.map((transaction) => ({
+		date: transaction.date,
+		profit: transaction.items.reduce((acc, item) => {
+			const vendorCost = item.inventoryItem ? item.inventoryItem.vendorCost : 0;
+			return acc + (item.finalUnitPrice - vendorCost) * item.quantitySold;
+		}, 0),
+	}));
+
+	const salesData = filteredTransactions.map((transaction) => ({
+		date: transaction.date,
+		amount: transaction.totalAmount,
+	}));
+
+	const filteredSalesData = salesData.filter((data) => {
+		const date = new Date(data.date);
+		const startDate = dateRange.startDate ? new Date(dateRange.startDate) : null;
+		const endDate = dateRange.endDate ? new Date(dateRange.endDate) : null;
+		return (!startDate || date >= startDate) && (!endDate || date <= endDate);
+	});
+
+	const inventoryData = inventory.map((item) => ({
+		name: item.product.name,
+		stockQuantity: item.stockQuantity,
+	}));
+
+	const categorySales = {};
+	filteredTransactions.forEach((transaction) => {
+		transaction.items.forEach((item) => {
+			const category = item.inventoryItem?.product?.category?.name;
+			if (category) {
+				categorySales[category] = (categorySales[category] || 0) + item.quantitySold * item.finalUnitPrice;
+			}
+		});
+	});
+
+	const pieChartData = Object.entries(categorySales).map(([category, amount]) => ({
+		name: category,
+		value: amount,
+	}));
+
+	const COLORS = [
+		"#0088FE",
+		"#00C49F",
+		"#FFBB28",
+		"#FF8042",
+		"#AF19FF",
+		"#FF1919",
+		"#19FF19",
+		"#1919FF",
+		"#FF19FF",
+		"#19FFFF",
+	];
+
+	return (
+		<div className="main-content">
+			<div className="header">
+				<h2>Dashboard</h2>
+			</div>
+			<div className="dashboard-content">
+				<div className="filter-container">
+					<DatePicker
+						selected={dateRange.startDate}
+						onChange={(date) =>
+							setDateRange((prev) => ({
+								...prev,
+								startDate: date,
+							}))
+						}
+						selectsStart
+						startDate={dateRange.startDate}
+						endDate={dateRange.endDate}
+						isClearable={true}
+						placeholderText="Start Date"
+					/>
+          <i class="fa fa-arrow-right"></i>
+					<DatePicker
+						selected={dateRange.endDate}
+						onChange={(date) => setDateRange((prev) => ({ ...prev, endDate: date }))}
+						selectsEnd
+						startDate={dateRange.startDate}
+						endDate={dateRange.endDate}
+						minDate={dateRange.startDate}
+						isClearable={true}
+						placeholderText="End Date"
+					/>
+				</div>
+				<DashboardKPIs
+					totalInventoryRetail={totalInventoryRetail}
+					totalInventoryCost={totalInventoryCost}
+					totalSales={totalSales}
+					totalProfit={totalProfit}
+					totalItemsSold={totalItemsSold}
+				/>
+				<DashboardCharts
+					topSellingProductsChartData={topSellingProductsChartData}
+					profitabilityData={profitabilityData}
+					inventoryData={inventoryData}
+					pieChartData={pieChartData}
+					filteredSalesData={filteredSalesData}
+					COLORS={COLORS}
+				/>
+			</div>
+		</div>
+	);
 }
 
 export default Dashboard;
